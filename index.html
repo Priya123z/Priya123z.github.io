@@ -157,18 +157,21 @@
             </a>
           </div>
           <h3 class="card-title">AI Test-Case Generator</h3>
-          <p class="card-desc">Paste a user story and get back structured Gherkin scenarios and Pytest skeletons. Pydantic validates every field of the LLM output — if Claude returns malformed JSON, the generator raises a <code>ValueError</code> rather than silently producing garbage. Streamlit UI makes it self-service for the team.</p>
+          <p class="card-desc">Paste a user story and get back structured Gherkin scenarios and Pytest skeletons. Pydantic enforces the output schema on every LLM response — if Claude returns malformed JSON, the generator raises a typed <code>ValueError</code> rather than silently producing garbage. The Streamlit UI makes it self-service for the whole QA team with one-click download of the <code>.feature</code> file or <code>.py</code> skeleton.</p>
           <div class="card-tech">
             <span class="tech tech--orange">Claude API</span>
             <span class="tech tech--orange">Streamlit</span>
-            <span class="tech">Python</span>
-            <span class="tech">Pydantic</span>
+            <span class="tech">Python 3.11</span>
+            <span class="tech">Pydantic v2</span>
+            <span class="tech">Pytest</span>
             <span class="tech">GitHub Actions</span>
           </div>
           <ul class="card-bullets">
-            <li>Versioned system prompts in <code>prompts.py</code> — one file to iterate strategy</li>
-            <li>Unit tests mock the LLM client — CI passes with no API key needed</li>
-            <li>Structured output: <code>TestSuite → [GherkinScenario] → [GherkinStep]</code></li>
+            <li>Pydantic models enforce <code>TestSuite → GherkinScenario → GherkinStep</code> — structured, never raw text</li>
+            <li>Versioned system prompts in <code>app/prompts.py</code> — strategy changes are a one-file diff, not scattered prompt strings</li>
+            <li>Unit tests mock the Anthropic client entirely — full CI suite passes with no API key in the environment</li>
+            <li>Three output tabs: Gherkin <code>.feature</code> file, Python <code>.py</code> skeleton, raw JSON — each downloadable</li>
+            <li>Honest <code>coverage_notes</code> field in every response calls out what the LLM chose not to generate</li>
           </ul>
         </article>
 
@@ -350,30 +353,68 @@
     <div class="container">
       <span class="section-label" data-reveal>Contact</span>
       <h2 class="section-heading" data-reveal data-delay="1">Open to senior QA &amp; SDET roles.</h2>
-      <p class="contact-sub" data-reveal data-delay="2">Mumbai or remote. Drop me a line.</p>
 
-      <div class="contact-links" data-reveal data-delay="3">
-        <a href="mailto:prbhagoriya20@gmail.com" class="contact-link">
-          <div class="contact-link-icon">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      <div class="contact-grid">
+        <div class="contact-left" data-reveal data-delay="2">
+          <div class="contact-availability">
+            <div class="avail-dot"></div>
+            Available for new opportunities
           </div>
-          prbhagoriya20@gmail.com
-          <svg class="contact-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="m7 17 10-10"/></svg>
-        </a>
-        <a href="https://linkedin.com/in/priya-bhagoriya" target="_blank" rel="noopener" class="contact-link">
-          <div class="contact-link-icon">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+
+          <p class="contact-blurb">
+            I'm looking for senior QA Engineer or SDET roles with meaningful automation scope — greenfield framework work, AI-in-testing projects, or quality engineering in a fast-moving product team. I bring five years of enterprise experience and a clear direction toward modern Python tooling and LLM-augmented test workflows.
+          </p>
+
+          <div class="contact-details">
+            <div class="contact-detail-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Mumbai, India</span>
+            </div>
+            <div class="contact-detail-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              <span>Open to remote &amp; hybrid</span>
+            </div>
+            <div class="contact-detail-item">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              <span>Python · Playwright · AI Testing focus</span>
+            </div>
           </div>
-          linkedin.com/in/priya-bhagoriya
-          <svg class="contact-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="m7 17 10-10"/></svg>
-        </a>
-        <a href="https://github.com/Priya123z" target="_blank" rel="noopener" class="contact-link">
-          <div class="contact-link-icon">
-            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
-          </div>
-          github.com/Priya123z
-          <svg class="contact-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="m7 17 10-10"/></svg>
-        </a>
+        </div>
+
+        <div class="contact-links" data-reveal data-delay="3">
+          <a href="mailto:prbhagoriya20@gmail.com" class="contact-link">
+            <div class="contact-link-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </div>
+            <div class="contact-link-text">
+              <span class="contact-link-label">Email</span>
+              <span class="contact-link-value">prbhagoriya20@gmail.com</span>
+            </div>
+            <svg class="contact-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="m7 17 10-10"/></svg>
+          </a>
+
+          <a href="https://linkedin.com/in/priya-bhagoriya" target="_blank" rel="noopener" class="contact-link">
+            <div class="contact-link-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </div>
+            <div class="contact-link-text">
+              <span class="contact-link-label">LinkedIn</span>
+              <span class="contact-link-value">linkedin.com/in/priya-bhagoriya</span>
+            </div>
+            <svg class="contact-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="m7 17 10-10"/></svg>
+          </a>
+
+          <a href="https://github.com/Priya123z" target="_blank" rel="noopener" class="contact-link">
+            <div class="contact-link-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            </div>
+            <div class="contact-link-text">
+              <span class="contact-link-label">GitHub</span>
+              <span class="contact-link-value">github.com/Priya123z</span>
+            </div>
+            <svg class="contact-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="m7 17 10-10"/></svg>
+          </a>
+        </div>
       </div>
     </div>
   </section>
