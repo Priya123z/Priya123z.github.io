@@ -4,7 +4,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  /* Soft Lavender — light theme. Backgrounds: ghost white → lavender tint */
+  /* Soft Lavender   light theme. Backgrounds: ghost white → lavender tint */
   --bg:          #f8f7ff;   /* Ghost White */
   --bg-alt:      #efedff;   /* soft lavender wash */
   --card:        #ffffff;
@@ -12,7 +12,7 @@
   --card-border: #e6e2f7;
   --nav-bg:      rgba(248, 247, 255, 0.82);
 
-  /* Accent palette — periwinkle primary, soft-periwinkle secondary, peach warm */
+  /* Accent palette   periwinkle primary, soft-periwinkle secondary, peach warm */
   --cyan:        #6c5ce7;   /* primary periwinkle (readable on white) */
   --cyan-dim:    #5a48d0;
   --cyan-glow:   rgba(108, 92, 231, 0.16);
@@ -25,7 +25,7 @@
   --red:         #d6486a;
   --green:       #2ea36b;
 
-  /* Text — deep plum for strong contrast on light */
+  /* Text   deep plum for strong contrast on light */
   --text:        #2b2545;
   --text-muted:  #635d87;
   --text-faint:  #a8a2cc;
@@ -160,7 +160,7 @@ code {
   color: #f8f7ff;
 }
 .btn-primary:hover {
-  background: #5a48d0;
+  background: #3b5b09;
   transform: translateY(-2px);
   box-shadow: 0 10px 30px rgba(108, 92, 231, 0.3);
 }
@@ -189,7 +189,7 @@ code {
   overflow: hidden;
 }
 
-/* Aurora orbs — vibrant, clearly visible */
+/* Aurora orbs   vibrant, clearly visible */
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -267,7 +267,12 @@ code {
   line-height: 1.04;
   letter-spacing: -0.04em;
   margin-bottom: 1.25rem;
-  background: linear-gradient(120deg, var(--cyan) 0%, var(--violet) 42%, var(--orange) 100%);
+  background: linear-gradient(
+  120deg,
+  #06b6d4 0%,
+  #10b981 50%,
+  #f97316 100%
+);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -430,7 +435,7 @@ code {
 }
 
 /* ============================================================
-   BENTO PROJECTS — named grid areas (explicit, no ambiguity)
+   BENTO PROJECTS   named grid areas (explicit, no ambiguity)
    ============================================================ */
 .bento {
   display: grid;
@@ -515,10 +520,10 @@ code {
 .bento-enterprise .card-stat-row,
 .bento-more .card-stat-row { margin-top: auto; }
 
-/* Résumé download button in hero */
+/* Resume download button in hero */
 .btn-resume {
   background: rgba(147, 129, 255,0.14);
-  color: var(--cyan-dim);
+  color: var(#10b981);
   border: 1px solid rgba(147, 129, 255,0.45);
 }
 .btn-resume:hover { border-color: var(--cyan); background: rgba(147, 129, 255,0.22); color: var(--cyan); }
@@ -587,7 +592,7 @@ code {
   line-height: 1.75;
 }
 
-/* Tech badges — SOLID backgrounds, clearly visible */
+/* Tech badges   SOLID backgrounds, clearly visible */
 .card-tech {
   display: flex;
   flex-wrap: wrap;
@@ -615,7 +620,7 @@ code {
   color: #6c5ce7;
 }
 
-/* Card bullets — NO auto-margin to prevent gap in tall featured card */
+/* Card bullets   NO auto-margin to prevent gap in tall featured card */
 .card-bullets {
   list-style: none;
   display: flex;
@@ -813,7 +818,7 @@ code {
 .cert-issuer { font-size: 0.8rem; color: var(--text-muted); }
 
 /* ============================================================
-   CONTACT — Two-column layout, full container width
+   CONTACT   Two-column layout, full container width
    ============================================================ */
 .contact-grid {
   display: grid;

@@ -1,5 +1,5 @@
 /* ============================================================
-   SCROLL REVEAL — Intersection Observer
+   SCROLL REVEAL   Intersection Observer
    ============================================================ */
 const revealObserver = new IntersectionObserver(
   (entries) => {
@@ -36,7 +36,7 @@ setTimeout(() => {
 }, 2500);
 
 /* ============================================================
-   NAV — scroll state + active link
+   NAV   scroll state + active link
    ============================================================ */
 const nav = document.getElementById("nav");
 const sections = document.querySelectorAll("section[id]");
@@ -73,7 +73,7 @@ window.addEventListener("scroll", updateNav, { passive: true });
 updateNav();
 
 /* ============================================================
-   SCROLL HINT — fade out on scroll
+   SCROLL HINT   fade out on scroll
    ============================================================ */
 const scrollHint = document.querySelector(".scroll-hint");
 if (scrollHint) {
