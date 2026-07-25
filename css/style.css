@@ -156,7 +156,7 @@ code {
   text-decoration: none !important;
 }
 .btn-primary {
-  background: var(--cyan);
+  background: var(#c06a32);
   color: #f8f7ff;
 }
 .btn-primary:hover {
