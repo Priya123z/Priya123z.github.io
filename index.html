@@ -174,11 +174,11 @@
             <span class="tech">GitHub Actions</span>
           </div>
           <ul class="card-bullets">
-            <li>Ships three ways: a <code>aiqa scan</code> CLI, a reusable GitHub Action, and an importable Python library</li>
+            <li>Reviews each file <em>with cross-file context</em> (RAG-lite) — catches integration bugs like "payments never verifies the token auth issues"</li>
+            <li>Generates real tests (<code>.feature</code> + pytest) and self-heals broken selectors into resilient Playwright locators</li>
             <li>Every LLM response is validated through Pydantic before it reaches a report — no fabricated findings</li>
-            <li>15-test suite runs green with <em>no API key</em> — the LLM client is fully mocked, so CI never needs a secret</li>
-            <li>Weighted <code>risk_score</code> + configurable gate — block PRs on new criticals, or just report</li>
-            <li>Real sample report auto-deployed to GitHub Pages — a live, clickable demo, not a screenshot</li>
+            <li>Weighted <code>risk_score</code> + gate; 18-test suite runs green with <em>no API key</em> (LLM mocked)</li>
+            <li>A real run on a 3-file demo API surfaced <strong>21 findings (5 critical)</strong> — the live report is that run, not a screenshot</li>
           </ul>
           <div class="card-cta-row">
             <a href="https://priya123z.github.io/AI-pipeline-report/" target="_blank" rel="noopener" class="card-demo-btn">
