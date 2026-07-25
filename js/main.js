@@ -17,6 +17,24 @@ document.querySelectorAll("[data-reveal]").forEach((el) => {
   revealObserver.observe(el);
 });
 
+/* Robustness: content must never stay invisible. Reveal anything already in
+   view on load / hash-jump, and a hard failsafe so nothing is ever stuck. */
+function revealInView() {
+  document.querySelectorAll("[data-reveal]:not(.is-visible)").forEach((el) => {
+    if (el.getBoundingClientRect().top < window.innerHeight + 100) {
+      el.classList.add("is-visible");
+      revealObserver.unobserve(el);
+    }
+  });
+}
+window.addEventListener("load", revealInView);
+window.addEventListener("hashchange", () => setTimeout(revealInView, 60));
+setTimeout(() => {
+  document.querySelectorAll("[data-reveal]:not(.is-visible)").forEach((el) =>
+    el.classList.add("is-visible")
+  );
+}, 2500);
+
 /* ============================================================
    NAV — scroll state + active link
    ============================================================ */
