@@ -241,13 +241,14 @@ The reset link must expire after 30 minutes and work only once. Three failed res
             <div class="demo-output" id="heal-output" aria-live="polite"></div>
           </div>
 
-          <details class="demo-key-wrap">
-            <summary>Rate limited? Use your own key</summary>
+          <details class="demo-key-wrap" open>
+            <summary>Run it live with your own key</summary>
             <p>
-              The shared key is on a free tier with a daily budget, so it is capped per
-              visitor. A free Groq key from
-              <a href="https://console.groq.com/keys" target="_blank" rel="noreferrer">console.groq.com/keys</a>
-              removes the cap. It is sent with the request and never stored.
+              Grab a free key at
+              <a href="https://console.groq.com/keys" target="_blank" rel="noreferrer">console.groq.com/keys</a> —
+              no card, about a minute. Paste it here and your browser calls Groq directly,
+              so nothing is sent to me, nothing is stored, and it is gone when you close
+              the tab.
             </p>
             <input id="demo-key" type="password" placeholder="gsk_..." autocomplete="off" spellcheck="false">
           </details>
