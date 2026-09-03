@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=edecfbf6">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -33,7 +33,7 @@
   }
   </script>
 </head>
-<body data-api="https://priya123z-ai-review-api.hf.space">
+<body data-api="">
   <a class="skip-link" href="#home">Skip to content</a>
   <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -191,8 +191,9 @@
             <h2>Use the AI yourself</h2>
           </div>
           <p>
-            These call a real model. Change the input and run it — the output is generated
-            each time, not a recording.
+            Run these on a free Groq key and the output is generated in your browser,
+            each time, from whatever you type. Without a key you get a saved response —
+            still real model output, just not generated on the spot.
           </p>
         </div>
 
@@ -252,10 +253,11 @@ The reset link must expire after 30 minutes and work only once. Three failed res
           </details>
 
           <p class="demo-foot">
-            Behind this: Groq first, OpenRouter if Groq is busy, and a saved example if both
-            are out of budget — labelled as such rather than pretending to be live. Requests
-            are budgeted by token count, because tokens per minute runs out before request
-            count does. <a href="https://github.com/Priya123z/ai-code-review" target="_blank" rel="noreferrer">Source ↗</a>
+            The same prompts and schemas run as a CLI and a GitHub Action, and as a FastAPI
+            service for anyone who wants one instance shared across a team — that version
+            falls through Groq to OpenRouter to a cached response, and budgets by token
+            count because tokens per minute runs out before request count does.
+            <a href="https://github.com/Priya123z/ai-code-review" target="_blank" rel="noreferrer">Source ↗</a>
           </p>
         </div>
       </div>
@@ -362,6 +364,7 @@ The reset link must expire after 30 minutes and work only once. Three failed res
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="prompts.js?v=feb93e7f"></script>
+  <script src="script.js?v=848d8e33"></script>
 </body>
 </html>

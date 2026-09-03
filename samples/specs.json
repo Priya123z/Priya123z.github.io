@@ -1,0 +1,82 @@
+{
+  "feature": "Password reset via email",
+  "scenarios": [
+    {
+      "name": "Successful password reset using email link",
+      "steps": [
+        "Given a registered user with email \"user@example.com\"",
+        "When the user requests a password reset",
+        "Then an email with a reset link is sent to \"user@example.com\"",
+        "When the user clicks the link within 30 minutes",
+        "And provides a new password \"NewPass123!\"",
+        "Then the password is updated and the user can log in with the new password"
+      ]
+    },
+    {
+      "name": "Reset link expires after 30 minutes",
+      "steps": [
+        "Given a password reset email was sent to \"user@example.com\" at time T0",
+        "When the user clicks the link at time T0 plus 30 minutes and 1 second",
+        "Then the system shows an \"link expired\" error and does not allow password change"
+      ]
+    },
+    {
+      "name": "Reset link can be used only once",
+      "steps": [
+        "Given a password reset email was sent to \"user@example.com\"",
+        "When the user clicks the link and sets a new password",
+        "Then the password is changed successfully",
+        "When the same link is clicked again",
+        "Then the system shows an \"invalid or used link\" error"
+      ]
+    },
+    {
+      "name": "Request reset with unregistered email",
+      "steps": [
+        "Given an email address \"unknown@example.com\" that is not associated with any account",
+        "When the user requests a password reset for that email",
+        "Then the system responds with a generic message indicating that if the email exists, instructions have been sent",
+        "And no email is actually sent to \"unknown@example.com\""
+      ]
+    },
+    {
+      "name": "Multiple reset requests and one-time link usage",
+      "steps": [
+        "Given a registered user requests a password reset and receives link A",
+        "And the same user requests another password reset and receives link B",
+        "When the user uses link A to set a new password",
+        "Then the password is updated and link A becomes invalid",
+        "When the user later uses link B within 30 minutes",
+        "Then the password is updated again and link B becomes invalid"
+      ]
+    }
+  ],
+  "pytest_cases": [
+    {
+      "function_name": "test_password_reset_happy_path",
+      "intent": "verify successful reset with valid link within expiry",
+      "skeleton": "def test_password_reset_happy_path():\n    ..."
+    },
+    {
+      "function_name": "test_password_reset_link_expiration",
+      "intent": "ensure link is rejected after 30 minutes",
+      "skeleton": "def test_password_reset_link_expiration():\n    ..."
+    },
+    {
+      "function_name": "test_password_reset_one_time_use",
+      "intent": "confirm link cannot be reused",
+      "skeleton": "def test_password_reset_one_time_use():\n    ..."
+    },
+    {
+      "function_name": "test_password_reset_invalid_email",
+      "intent": "check behavior for non\u2011existent email",
+      "skeleton": "def test_password_reset_invalid_email():\n    ..."
+    },
+    {
+      "function_name": "test_password_reset_concurrent_requests",
+      "intent": "validate multiple links and one\u2011time usage",
+      "skeleton": "def test_password_reset_concurrent_requests():\n    ..."
+    }
+  ],
+  "coverage_notes": "Reviewer should verify email delivery mock/stub, time\u2011travel handling for expiration, that generic responses do not disclose account existence, rate\u2011limit on reset requests, secure token generation, and that UI messages match expectations."
+}

@@ -1,0 +1,8 @@
+{
+  "found": true,
+  "strategy": "role",
+  "locator": "Pay now",
+  "playwright": "page.get_by_role('button', name='Pay now')",
+  "confidence": 0.95,
+  "reasoning": "The button's accessible name is 'Pay now', so a role-based locator is most resilient."
+}
