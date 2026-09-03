@@ -1,17 +1,19 @@
 # priya123z.github.io
 
-My portfolio and resume. Plain HTML, CSS and JavaScript — no build step, no
-framework, no `node_modules`. Six files, and you can open any of them and read
-the whole thing.
+My portfolio. Plain HTML, CSS and JavaScript — no build step, no framework, no
+`node_modules`. Five files, and you can open any of them and read the whole
+thing.
 
 Live at **[priya123z.github.io](https://priya123z.github.io/)**.
 
     index.html    the portfolio
-    resume.html   the resume, readable in the browser
-    style.css     one stylesheet for both pages
+    style.css     the stylesheet
     prompts.js    the prompts the browser-side tools send
     script.js     nav, and the three tool clients
     samples/      saved model answers, shown when there is no key
+
+    Priya_Bhagoriya_Resume.pdf    what the Resume buttons open
+    Priya_Bhagoriya_Resume.docx   the same document, for whoever wants it editable
 
 ## Running it
 
@@ -19,13 +21,20 @@ Any static server:
 
     python3 -m http.server 8000
 
-## Why the resume is a page, not just a download
+## The resume
 
-A PDF link makes a hiring manager decide whether to download a file before they
-know whether it is worth reading. `resume.html` shows the whole thing in the
-tab they already have open, with the PDF and Word copies one click away for
-whoever needs to file it. Same content in all three; the page has a print
-stylesheet so Ctrl+P also produces something clean.
+Every Resume button on the page opens
+[the PDF](https://priya123z.github.io/Priya_Bhagoriya_Resume.pdf) directly, in a
+new tab. There is no HTML version any more — there was briefly, and it meant one
+more hop between someone wanting to read the resume and reading it. A recruiter
+already knows what to do with a PDF.
+
+The `.docx` is the same document for anyone who wants it editable. Both are
+generated from the DOCX via `soffice --headless --convert-to pdf`, so after
+editing one, diff the extracted text to check the reconversion did not reflow
+anything:
+
+    pdftotext old.pdf - | diff - <(pdftotext new.pdf -)
 
 ## How the three tools answer
 
