@@ -9,3 +9,8 @@ node_modules/
 # Secrets for `wrangler dev`. The real key lives in `wrangler secret put`,
 # never in a file. This line is the reason that stays true.
 .dev.vars
+
+# The long-form guide. Kept out of the repository on purpose: it is written
+# against a working tree at a moment in time, and a document that ships with the
+# code but is not updated with it is worse than one that is plainly local.
+DEEP_DIVE.md
