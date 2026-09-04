@@ -1,4 +1,4 @@
-/* Priya Bhagoriya  portfolio styles.
+/* Portfolio styles.
 
    Two typefaces: IBM Plex Sans for everything you read, IBM Plex Mono for
    anything that is a number, a file path or a label on a diagram. Plex was
@@ -294,6 +294,117 @@ p:last-child { margin-bottom: 0; }
 
 /* ---------- architecture ---------- */
 
+/* The one-line rule the whole section rests on, so it does not read as another
+   paragraph among paragraphs. */
+.axiom {
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-left: 4px solid var(--pass);
+  border-radius: var(--radius);
+  padding: 26px 30px;
+  margin-bottom: 54px;
+}
+.slab-paper .axiom { background: var(--shell); }
+.axiom-rule {
+  font-size: clamp(20px, 2.1vw, 25px);
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.axiom p:last-child { font-size: 17px; color: var(--ink-mid); max-width: 78ch; }
+
+/* Sub-headings inside a slab, for the three parts of the architecture story. */
+.sub { font-size: 27px; margin-bottom: 10px; }
+.sub-lead { font-size: 17.5px; color: var(--ink-mid); max-width: 80ch; margin-bottom: 26px; }
+.stack + .sub, .trace + .sub, .blame + .sub { margin-top: 62px; }
+
+/* ---------- the worked example ---------- */
+
+.trace {
+  list-style: none;
+  margin: 0 0 0;
+  padding: 0 0 0 34px;
+  position: relative;
+}
+
+/* The line the numbers sit on. It is the point of the section: one direction,
+   downwards. */
+.trace::before {
+  content: "";
+  position: absolute;
+  left: 15px;
+  top: 14px;
+  bottom: 14px;
+  width: 2px;
+  background: linear-gradient(var(--pass) 0%, var(--rule) 100%);
+}
+
+.trace > li { position: relative; padding-bottom: 34px; }
+.trace > li:last-child { padding-bottom: 0; }
+
+.trace-step { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; }
+/* Flex items refuse to shrink below their content by default, and one of these
+   file paths is longer than a phone is wide. */
+.trace-step > div { min-width: 0; }
+
+.trace-num {
+  position: absolute;
+  left: -34px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--pass);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+
+.trace-step strong { font-size: 19px; font-weight: 650; letter-spacing: -0.015em; }
+.trace-step code {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  color: var(--ink-dim);
+  display: block;
+  margin-top: 2px;
+  overflow-wrap: anywhere;
+}
+
+.trace pre {
+  background: var(--deep);
+  color: #dceee5;
+  border-radius: var(--radius-sm);
+  padding: 18px 22px;
+  overflow-x: auto;
+  margin: 0 0 14px;
+}
+.trace pre code {
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.62;
+  color: inherit;
+  display: block;
+  margin: 0;
+  white-space: pre;
+}
+
+.trace > li > p { font-size: 17px; color: var(--ink-mid); max-width: 82ch; margin: 0; }
+.trace > li > p code {
+  font-family: var(--mono);
+  font-size: 14.5px;
+  background: var(--pass-tint);
+  color: #08553c;
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+.trace > li > p em { font-style: normal; color: var(--ink); }
+
+
 .stack { border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden; background: var(--paper); }
 .slab-paper .stack { background: var(--shell); }
 
@@ -334,7 +445,52 @@ p:last-child { margin-bottom: 0; }
 .stack-out .layer-rule { color: rgba(220,238,229,.82); }
 .stack-out .layer-rule b { color: #fff; }
 
-.stack-note { margin-top: 26px; font-size: 17px; color: var(--ink-mid); max-width: 80ch; }
+/* ---------- symptom to layer ---------- */
+
+.blame {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--paper);
+}
+.slab-paper .blame { background: var(--shell); }
+
+.blame-row {
+  display: grid;
+  grid-template-columns: 300px 190px minmax(0, 1fr);
+  gap: 28px;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--rule-soft);
+  align-items: baseline;
+}
+.blame-row:last-child { border-bottom: 0; }
+
+.blame-head {
+  background: var(--deep);
+  color: #fff;
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 13px 28px;
+}
+
+.blame-row > span:first-child { font-weight: 600; color: var(--ink); font-size: 17px; }
+.blame-head > span:first-child { font-weight: 500; color: #fff; font-size: 13px; }
+
+.blame-row > span:nth-child(2) code {
+  font-family: var(--mono);
+  font-size: 14px;
+  background: var(--pass-tint);
+  color: #08553c;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.blame-row > span:last-child { font-size: 16.5px; color: var(--ink-mid); line-height: 1.55; }
+.blame-head > span:last-child { font-size: 13px; color: rgba(255,255,255,.75); line-height: 1.4; }
+
+.stack-note { margin-top: 40px; font-size: 17px; color: var(--ink-mid); max-width: 82ch; }
 
 /* ---------- experience ---------- */
 
@@ -354,6 +510,20 @@ p:last-child { margin-bottom: 0; }
 .job-head span { font-size: 17px; color: var(--pass); font-weight: 600; }
 .job-what { margin: 12px 0 0; font-size: 17.5px; color: var(--ink-mid); max-width: 72ch; }
 .job-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+/* Two clients under one employer. The rule down the left is what says "these
+   both sit inside the row above" without repeating the company name twice. */
+.client {
+  margin-top: 26px;
+  padding-left: 22px;
+  border-left: 2px solid var(--rule);
+}
+.client:hover { border-left-color: #b9dcce; }
+.client-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+.client-head h4 { font-size: 19px; font-weight: 650; }
+.client-when { font-family: var(--mono); font-size: 13.5px; color: var(--ink-dim); }
+.client > p { margin: 0; font-size: 17px; color: var(--ink-mid); max-width: 72ch; }
+.client .job-tags { margin-top: 14px; }
 
 /* ---------- about / contact ---------- */
 
@@ -467,6 +637,7 @@ p:last-child { margin-bottom: 0; }
   .card-row { grid-template-columns: 1fr 1fr; }
   .layer, .stack-out { grid-template-columns: 220px minmax(0, 1fr); gap: 22px 28px; }
   .layer-rule { grid-column: 2 / -1; }
+  .blame-row { grid-template-columns: 230px 165px minmax(0, 1fr); gap: 20px; }
   .strip-grid { grid-template-columns: 1fr 1fr; }
   .strip-grid > div { border-bottom: 1px solid var(--rule-soft); }
   .strip-grid > div:nth-child(2n) { border-right: 0; }
@@ -502,6 +673,17 @@ p:last-child { margin-bottom: 0; }
   .layer, .stack-out { grid-template-columns: 1fr; gap: 14px; padding: 22px 24px; }
   .layer-rule { grid-column: auto; }
   .job { grid-template-columns: 1fr; gap: 10px; }
+  .axiom { padding: 22px 24px; }
+  .trace { padding-left: 0; }
+  .trace::before { display: none; }
+  .trace-num { position: static; width: 27px; height: 27px; font-size: 14px; }
+  .trace-step { align-items: center; }
+  .trace pre { padding: 15px 16px; }
+  .trace pre code { font-size: 13px; }
+  .blame-row { grid-template-columns: 1fr; gap: 7px; padding: 20px 22px; }
+  .blame-head { display: none; }
+  .blame-row > span:nth-child(2) { justify-self: start; }
+  .client { padding-left: 16px; margin-top: 22px; }
   .spec-list li { flex-direction: column; gap: 3px; }
   .spec-list b { min-width: 0; }
   .closer { padding: 44px 26px; }

@@ -1,4 +1,11 @@
 .DS_Store
-node_modules/
 
+# Local notes, never published.
 WALKTHROUGH.local.md
+
+# worker/
+node_modules/
+.wrangler/
+# Secrets for `wrangler dev`. The real key lives in `wrangler secret put`,
+# never in a file. This line is the reason that stays true.
+.dev.vars

@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<title>Priya Bhagoriya  SDET and AI Test Engineer</title>
+<title>Priya Bhagoriya: SDET and AI Test Engineer</title>
 <meta name="description" content="Priya Bhagoriya, SDET and AI Test Engineer in Mumbai. Python, Playwright, Pytest and REST API automation running in CI, plus tooling for testing LLM-backed systems. Live test reports and demos you can run yourself.">
 <link rel="canonical" href="https://priya123z.github.io/">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22><rect width=%2232%22 height=%2232%22 rx=%228%22 fill=%22%230a6e4e%22/><path d=%22M9 16.5l4.6 4.6L23 11.7%22 stroke=%22white%22 stroke-width=%223.4%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://priya123z.github.io/">
-<meta property="og:title" content="Priya Bhagoriya  SDET and AI Test Engineer">
+<meta property="og:title" content="Priya Bhagoriya: SDET and AI Test Engineer">
 <meta property="og:description" content="Python, Playwright and API automation running in CI, plus tooling for testing LLM-backed systems. Live reports and demos you can run yourself.">
 <meta name="twitter:card" content="summary">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=20260903a">
+<link rel="stylesheet" href="style.css?v=20260904a">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -30,12 +30,16 @@
 }
 </script>
 </head>
+<!-- The address of the Worker in worker/, which holds the Groq key as a secret
+     so visitors get live answers without needing a key of their own. Empty here
+     means "not deployed", and the tools fall back to saved answers. See
+     worker/README.md. -->
 <body data-api="">
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="topbar">
   <div class="wrap topbar-inner">
-    <a class="wordmark" href="#main">Priya Bhagoriya <span> SDET</span></a>
+    <a class="wordmark" href="#main">Priya Bhagoriya <span>SDET</span></a>
 
     <button class="hamburger" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navset">
       <i></i><i></i><i></i>
@@ -56,7 +60,7 @@
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <p class="role">SDET / AI Test Engineer  Mumbai, India</p>
+        <p class="role">SDET / AI Test Engineer, Mumbai, India</p>
         <h1>I build test automation.</h1>
         <p class="lead">
           Seven years writing Python, Playwright and REST API suites for healthcare, banking,
@@ -96,7 +100,7 @@
           <li>
             <span class="evidence-num">3</span>
             <span class="evidence-what">AI tools you can use in this tab
-              <small>Bring a free key and they answer live, in your browser</small></span>
+              <small>No key, no signup, no install. Click a button and a model answers.</small></span>
             <a href="#demos">Try them</a>
           </li>
           <li>
@@ -127,7 +131,7 @@
           <p>
             A production-shaped Python and Playwright framework covering browser workflows and
             API validation. Layered so a test reads as intent and never touches a selector,
-            with the plumbing  config, browsers, auth, artifacts  behind fixtures.
+            with the plumbing (config, browsers, auth, artifacts) behind fixtures.
           </p>
 
           <ul class="spec-list">
@@ -220,9 +224,17 @@
       <div class="slab-head">
         <h2>Try the tools</h2>
         <p>
-          These are the same prompts and schemas that run in CI, wired to the page. Paste a free
-          Groq key and your browser calls the model directly  nothing reaches me and nothing is
-          stored. Without a key you get a saved answer from a real run, labelled as saved.
+          The same three prompts that run in CI, wired to this page. Put something in a box, press
+          the button, and a model answers. There is nothing to install and no key to go and get:
+          the request goes to a small Cloudflare Worker that holds my Groq key as a secret and
+          answers on it, inside a daily budget.
+        </p>
+        <p class="small dim">
+          Every answer says where it came from. If the day's budget is spent, or Groq is having a
+          bad afternoon, you get a saved answer from a real earlier run and it says so rather than
+          passing itself off as live. If you would rather not be in a queue at all, there is a box
+          at the bottom for your own free key, and then your browser talks to Groq directly and
+          skips me entirely.
         </p>
       </div>
 
@@ -270,13 +282,19 @@ The reset link must expire after 30 minutes and work only once. Three failed res
           <div class="demo-out" id="heal-output" aria-live="polite"></div>
         </div>
 
-        <details class="keyrow" open>
-          <summary>Run it live with your own key</summary>
+        <details class="keyrow">
+          <summary>Optional: run it on your own key instead</summary>
+          <p>
+            You do not need one. This is here for when the shared budget is spent, or you want to
+            hammer the tools without a per-visitor cap, or you would simply rather not send your
+            code through anything of mine.
+          </p>
           <p>
             Get a free key at
-            <a class="linkline" href="https://console.groq.com/keys" target="_blank" rel="noreferrer">console.groq.com/keys</a>.
-            No card, about a minute. Paste it below and your browser talks to Groq directly, so the
-            key stays on your machine and is gone when you close the tab.
+            <a class="linkline" href="https://console.groq.com/keys" target="_blank" rel="noreferrer">console.groq.com/keys</a>:
+            no card, about a minute. Paste it below and your browser calls Groq directly. The key
+            stays in this one input, goes nowhere except to Groq, is never written to storage, and
+            is gone when you close the tab.
           </p>
           <input id="demo-key" type="password" placeholder="gsk_..." autocomplete="off" spellcheck="false" aria-label="Your Groq API key">
         </details>
@@ -284,7 +302,9 @@ The reset link must expire after 30 minutes and work only once. Three failed res
         <p class="demo-foot">
           The same three prompts also run as a CLI, as a GitHub Action that comments on pull
           requests, and as a FastAPI service for a team that wants one shared instance.
-          <a class="linkline" href="https://github.com/Priya123z/ai-code-review" target="_blank" rel="noreferrer">Read the code</a>
+          <a class="linkline" href="https://github.com/Priya123z/ai-code-review" target="_blank" rel="noreferrer">Read the code</a>,
+          or read
+          <a class="linkline" href="https://github.com/Priya123z/Priya123z.github.io/tree/main/worker" target="_blank" rel="noreferrer">the Worker behind this page</a>.
         </p>
       </div>
     </div>
@@ -295,11 +315,113 @@ The reset link must expire after 30 minutes and work only once. Three failed res
       <div class="slab-head">
         <h2>How I structure automation</h2>
         <p>
-          Four layers, each allowed to call only the one below it. The point is that a failure
-          tells you where to look before you open anything: a broken selector can only be in the
-          page layer, a wrong expectation can only be in the test.
+          Every framework I have built has ended up in roughly this shape, because it is the shape
+          that answers one question fastest: <b>something went red at 3am, where do I look?</b>
+          Four layers, each allowed to call only the one below it, so the answer falls out of the
+          stack trace instead of out of an hour of reading.
         </p>
       </div>
+
+      <div class="axiom">
+        <p class="axiom-rule">A layer may call downwards. It may never call upwards or sideways.</p>
+        <p>
+          That is the whole rule, and it is worth being pedantic about, because the value only
+          arrives when there are no exceptions. One test that reaches past its flow and grabs a
+          selector directly is not a small shortcut. It is the thing that turns "the checkout page
+          changed" from a one-file edit into a search across the suite.
+        </p>
+      </div>
+
+      <h3 class="sub">One test, all the way down</h3>
+      <p class="sub-lead">
+        This is a real test from the framework, and every line below it is the code it actually
+        reaches. Read it downwards: each box only knows about the one under it.
+      </p>
+
+      <ol class="trace">
+        <li>
+          <div class="trace-step"><span class="trace-num">1</span>
+            <div><strong>The test</strong> <code>tests/UI/test_login.py</code></div>
+          </div>
+          <pre><code>def test_login_user(page, registered_user):
+    home = HomePage(page)
+    signup_login = home.navbar.open_signup_login()
+    signup_login.login(registered_user.email, registered_user.password)
+
+    assert home.user_logged_in()</code></pre>
+          <p>
+            Six lines, and every one of them is a sentence about the product. No URL, no selector,
+            no wait, no browser. The only assertion in the whole trace is the last line, and that
+            is on purpose: if this file goes red, the expectation was wrong or the product was.
+          </p>
+        </li>
+
+        <li>
+          <div class="trace-step"><span class="trace-num">2</span>
+            <div><strong>The fixtures it asked for</strong> <code>conftest.py</code></div>
+          </div>
+          <pre><code>page               # a browser, already launched and configured
+registered_user    # a real account, already created through the API</code></pre>
+          <p>
+            The test names two things it needs and gets them. It does not know that <code>page</code>
+            came from a factory that read an env file to decide on Chromium and headless, or that
+            <code>registered_user</code> was created over HTTP because doing it through the UI would
+            cost fifteen seconds a test. Setup that fails is a fixture error, not a test failure,
+            and the report says so.
+          </p>
+        </li>
+
+        <li>
+          <div class="trace-step"><span class="trace-num">3</span>
+            <div><strong>The page object</strong> <code>pages/signup_login_page/signup_login_page.py</code></div>
+          </div>
+          <pre><code>self._login_email    = page.locator("[data-qa='login-email']")
+self._login_password = page.locator("[data-qa='login-password']")
+self._login_button   = page.locator("[data-qa='login-button']")
+
+def login(self, email, password) -> HomePage:
+    self.fill(self._login_email, email, "Login Email")
+    self.fill(self._login_password, password, "Login Password")
+    self.click(self._login_button, "Click on Login Button")
+    home = HomePage(self.page)
+    home.is_loaded()
+    return home</code></pre>
+          <p>
+            The only file in the trace that knows what the page looks like. Two things worth
+            pointing at: the selectors are attributes set once in the constructor rather than
+            strings scattered through methods, and <code>login()</code> returns the page you end up
+            on. That return is what lets the test read as a journey without the test ever naming a
+            navigation.
+          </p>
+        </li>
+
+        <li>
+          <div class="trace-step"><span class="trace-num">4</span>
+            <div><strong>The base page</strong> <code>pages/base_page.py</code></div>
+          </div>
+          <pre><code>def click(self, locator, description):
+    self.wait_for_visibility(locator, description)
+    return self._execute_action(
+        action=lambda: locator.click(),
+        operation="Click",
+        locator=locator,
+        description=description,
+    )</code></pre>
+          <p>
+            Nobody calls Playwright directly. Every interaction goes through here, which is why
+            waiting, logging and the screenshot-on-failure are consistent across a hundred call
+            sites instead of being remembered ninety-four times. <code>description</code> is not
+            decoration: it is what turns a failure into <em>"Failed Click: Login Button"</em>
+            rather than a locator string nobody can read at a glance.
+          </p>
+        </li>
+      </ol>
+
+      <h3 class="sub">The four layers</h3>
+      <p class="sub-lead">
+        Same idea stated as rules rather than as a walkthrough. The column that does the real work
+        is the last one, because a layer is defined by what it is <em>not</em> allowed to contain.
+      </p>
 
       <div class="stack">
         <div class="layer layer-top">
@@ -307,17 +429,20 @@ The reset link must expire after 30 minutes and work only once. Three failed res
             <strong>Tests</strong>
             <em>may call flows</em>
           </div>
-          <div class="layer-holds"><code>tests/ui/</code><code>tests/api/</code></div>
-          <p class="layer-rule">Reads like the requirement. <b>Holds assertions and nothing else</b>  no selectors, no URLs, no waits.</p>
+          <div class="layer-holds"><code>tests/UI/</code><code>tests/api/</code></div>
+          <p class="layer-rule">Reads like the requirement, and holds the assertions.
+            <b>Never holds</b> a selector, a URL, a wait, or a piece of setup.</p>
         </div>
 
         <div class="layer">
           <div class="layer-name">
             <strong>Flows</strong>
-            <em>may call pages</em>
+            <em>may call pages and clients</em>
           </div>
-          <div class="layer-holds"><code>flows/auth_flow.py</code><code>flows/product_flow.py</code></div>
-          <p class="layer-rule">Multi-step journeys written once. <b>Register, log in, add to cart, check out</b>  so twelve tests share one path through the app.</p>
+          <div class="layer-holds"><code>flows/UI_Flow/</code><code>flows/API_Flow/</code></div>
+          <p class="layer-rule">Journeys that more than one test needs: register, log in, add to
+            cart, check out. <b>Never holds</b> an assertion. A flow that asserts is a test
+            pretending to be a helper, and the failure surfaces in the wrong place.</p>
         </div>
 
         <div class="layer">
@@ -325,8 +450,10 @@ The reset link must expire after 30 minutes and work only once. Three failed res
             <strong>Pages and API clients</strong>
             <em>may call services</em>
           </div>
-          <div class="layer-holds"><code>pages/cart_page.py</code><code>api/api_client.py</code><code>models/</code></div>
-          <p class="layer-rule">The only place that knows what the app looks like. <b>Every selector and endpoint lives here</b>, so a redesign touches one file per screen.</p>
+          <div class="layer-holds"><code>pages/</code><code>api/api_client.py</code><code>models/</code></div>
+          <p class="layer-rule">The only place that knows what the app looks like: every selector,
+            every endpoint, every response model. <b>Never holds</b> test data or a decision about
+            what should happen, so a redesign is one file per screen.</p>
         </div>
 
         <div class="layer">
@@ -335,7 +462,9 @@ The reset link must expire after 30 minutes and work only once. Three failed res
             <em>calls nothing above</em>
           </div>
           <div class="layer-holds"><code>config_manager</code><code>browser_factory</code><code>authentication_manager</code><code>artifact_manager</code></div>
-          <p class="layer-rule">Singletons and factories behind fixtures. <b>A test never builds a browser or reads an env file</b>; it asks for a page and gets one.</p>
+          <p class="layer-rule">Config, browsers, auth state, readers and writers, artifacts,
+            reached through fixtures. <b>Never holds</b> anything about this particular product,
+            which is the test that decides whether something belongs here at all.</p>
         </div>
 
         <div class="stack-out">
@@ -344,14 +473,61 @@ The reset link must expire after 30 minutes and work only once. Three failed res
             <em>written by every layer</em>
           </div>
           <div class="layer-holds"><code>allure</code><code>traces</code><code>screenshots</code><code>logs</code></div>
-          <p class="layer-rule">Everything lands in one run folder, keyed on a single execution id shared by all workers. <b>A failure arrives as a trace you can replay</b>, not a stack line.</p>
+          <p class="layer-rule">Everything lands in one run folder keyed on a single execution id
+            shared by every worker. <b>A failure arrives as a trace you can replay</b> in the
+            Playwright inspector, not as a stack line and a guess.</p>
+        </div>
+      </div>
+
+      <h3 class="sub">What this buys, concretely</h3>
+      <p class="sub-lead">
+        The layering is not tidiness. It is a lookup table from what you saw to where you go, and
+        it only works if the rule was kept everywhere.
+      </p>
+
+      <div class="blame">
+        <div class="blame-row blame-head">
+          <span>What went red</span><span>Where it is</span><span>Because</span>
+        </div>
+        <div class="blame-row">
+          <span>An assertion failed</span>
+          <span><code>tests/</code></span>
+          <span>Assertions live nowhere else, so either the expectation is stale or the product is
+            genuinely broken. Nothing else can produce this.</span>
+        </div>
+        <div class="blame-row">
+          <span>Timed out waiting for an element</span>
+          <span><code>pages/</code></span>
+          <span>Selectors live in exactly one layer. The screenshot is already attached and the
+            log line already names the element in English.</span>
+        </div>
+        <div class="blame-row">
+          <span>Half the suite failed at the same step</span>
+          <span><code>flows/</code></span>
+          <span>A shared journey broke. One fix, not fifteen, and the count of failures is what
+            tells you which layer to open.</span>
+        </div>
+        <div class="blame-row">
+          <span>A response no longer matches its schema</span>
+          <span><code>schemas/</code></span>
+          <span>Validation runs on every API response, so a renamed field fails loudly here
+            instead of passing quietly on a 200 and breaking a UI test tomorrow.</span>
+        </div>
+        <div class="blame-row">
+          <span>Everything failed before the first test</span>
+          <span><code>conftest.py</code></span>
+          <span>Setup, not product. Pytest reports a fixture error separately from a test failure,
+            which is the difference between "the environment is wrong" and "the code is wrong".</span>
         </div>
       </div>
 
       <p class="stack-note">
-        That last part was a real bug. Each parallel worker is its own process, and each one used
-        to stamp its own timestamp, so a run split across two folders and CI could publish the
-        empty one. One shared id fixed it.
+        The shared execution id in the evidence layer was a real bug, not a design flourish. Each
+        xdist worker is its own process, each one stamped its own timestamp, and a run split itself
+        across two folders. CI then published whichever one it found first, which was sometimes the
+        one with almost nothing in it. A green report over a half-empty folder is worse than a red
+        one, because nobody goes looking. The id is now generated once by the controller and passed
+        down through an environment variable, and every worker writes into the same place.
       </p>
     </div>
   </section>
@@ -364,39 +540,50 @@ The reset link must expire after 30 minutes and work only once. Three failed res
 
       <div class="jobs">
         <article class="job">
-          <p class="job-when">Apr 2024  present</p>
+          <p class="job-when">Aug 2023 to present</p>
           <div>
             <div class="job-head"><h3>Deloitte</h3><span>Senior Consultant</span></div>
             <p class="job-what">
-              Amplifon, an enterprise healthcare platform. Built the Playwright and Python
-              framework behind enterprise regression, and validated inventory, quotation,
-              contract lifecycle, payment and order modules through the UI, the REST API and SQL.
+              Two client engagements, both at Deloitte, in different industries and with different
+              shapes of problem.
             </p>
-            <div class="job-tags"><span class="tag">750+ cases</span><span class="tag">200+ defects triaged</span><span class="tag">SIT / UAT / regression</span></div>
+
+            <div class="client">
+              <div class="client-head">
+                <h4>Amplifon</h4>
+                <span class="client-when">Apr 2024 to present</span>
+              </div>
+              <p>
+                An enterprise healthcare platform. Built the Playwright and Python framework behind
+                enterprise regression, and validated the inventory, quotation, contract lifecycle,
+                payment and order modules through the UI, the REST API and SQL.
+              </p>
+              <div class="job-tags"><span class="tag">750+ cases</span><span class="tag">200+ defects triaged</span><span class="tag">SIT / UAT / regression</span></div>
+            </div>
+
+            <div class="client">
+              <div class="client-head">
+                <h4>Google India</h4>
+                <span class="client-when">Aug 2023 to Mar 2024</span>
+              </div>
+              <p>
+                A vendor management portal. Led a three-person QA team through planning, execution,
+                defect triage and sprint reporting, and built Apps Script integrations that kept
+                Sheets in step with Cloud SQL.
+              </p>
+              <div class="job-tags"><span class="tag">50+ scenarios</span><span class="tag">30% coverage lift</span><span class="tag">Led 3 engineers</span></div>
+            </div>
           </div>
         </article>
 
         <article class="job">
-          <p class="job-when">Aug 2023  Mar 2024</p>
-          <div>
-            <div class="job-head"><h3>Deloitte</h3><span>Senior Consultant</span></div>
-            <p class="job-what">
-              Google India, vendor management portal. Led a three-person QA team through planning,
-              execution, defect triage and sprint reporting, and built Apps Script integrations
-              that kept Sheets in step with Cloud SQL.
-            </p>
-            <div class="job-tags"><span class="tag">50+ scenarios</span><span class="tag">30% coverage lift</span><span class="tag">Led 3 engineers</span></div>
-          </div>
-        </article>
-
-        <article class="job">
-          <p class="job-when">Nov 2019  May 2023</p>
+          <p class="job-when">Nov 2019 to May 2023</p>
           <div>
             <div class="job-head"><h3>LTIMindtree</h3><span>Senior Software Engineer</span></div>
             <p class="job-what">
-              Charles Stanley in UK banking and wealth management, then American Honda Finance in
-              US auto finance. Selenium and Java suites built on reusable page objects and wired
-              into Jenkins and Azure DevOps for branch-based execution.
+              Two clients here as well: Charles Stanley in UK banking and wealth management, then
+              American Honda Finance in US auto finance. Selenium and Java suites built on reusable
+              page objects and wired into Jenkins and Azure DevOps for branch-based execution.
             </p>
             <div class="job-tags"><span class="tag">250+ Selenium scripts</span><span class="tag">70% regression coverage</span><span class="tag">Mentored 5 engineers</span></div>
           </div>
@@ -413,8 +600,8 @@ The reset link must expire after 30 minutes and work only once. Three failed res
       <div>
         <p>
           My work moved from Selenium and Java into Python and Playwright, and with it my interest
-          moved from writing cases to designing the thing that runs them  layering, CI, and how
-          fast a failure explains itself.
+          moved from writing cases to designing the thing that runs them: the layering, the CI,
+          and how fast a failure explains itself.
         </p>
         <p>
           The AI work follows the same instinct. I am not interested in generating more test code;
@@ -456,7 +643,8 @@ The reset link must expire after 30 minutes and work only once. Three failed res
   </div>
 </footer>
 
-<script src="prompts.js?v=20260903a"></script>
-<script src="script.js?v=20260903a"></script>
+<!-- script.js imports prompts.js, which the Worker in worker/ imports too, so
+     the browser and the backend send byte-identical prompts. -->
+<script type="module" src="script.js?v=20260904a"></script>
 </body>
 </html>

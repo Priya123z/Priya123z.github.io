@@ -1,0 +1,21 @@
+name = "priya-ai-tools"
+main = "src/index.js"
+compatibility_date = "2026-01-15"
+
+[observability]
+enabled = true
+
+# Daily counters for the shared key.
+#
+# Left commented out on purpose, so that `wrangler deploy` works on a clean
+# account with nothing set up. The Worker answers either way; without the
+# binding it simply stops counting, and Groq's own rate limit becomes the only
+# ceiling. Turn it on with:
+#
+#   wrangler kv namespace create BUDGET
+#
+# then uncomment these three lines and paste in the id it prints.
+#
+# [[kv_namespaces]]
+# binding = "BUDGET"
+# id = "paste-the-id-here"

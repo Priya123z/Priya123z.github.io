@@ -1,0 +1,13 @@
+{
+  "name": "priya-ai-tools-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "devDependencies": {
+    "wrangler": "^4.42.0"
+  }
+}

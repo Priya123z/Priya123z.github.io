@@ -1,79 +1,120 @@
 # priya123z.github.io
 
-My portfolio. Plain HTML, CSS and JavaScript  no build step, no framework, no
-`node_modules`. Five files, and you can open any of them and read the whole
-thing.
+My portfolio. Plain HTML, CSS and JavaScript, no build step and no framework.
+You can open any file in the repository and read the whole thing.
 
 Live at **[priya123z.github.io](https://priya123z.github.io/)**.
 
-    index.html    the portfolio
-    style.css     the stylesheet
-    prompts.js    the prompts the browser-side tools send
-    script.js     nav, and the three tool clients
-    samples/      saved model answers, shown when there is no key
+```
+index.html    the page
+style.css     the stylesheet
+prompts.js    the three prompts, imported by the page and by the Worker
+script.js     nav, and the three tool clients
+samples/      saved model answers, shown when nothing live is reachable
+check.py      the pre-push check, run with Playwright
+worker/       the Cloudflare Worker that holds the Groq key
 
-    Priya_Bhagoriya_Resume.pdf    what the Resume buttons open
-    Priya_Bhagoriya_Resume.docx   the same document, for whoever wants it editable
+Priya_Bhagoriya_Resume.pdf     what the Resume buttons open
+Priya_Bhagoriya_Resume.docx    the same document, for anyone who wants it editable
+```
 
 ## Running it
 
-Any static server:
+```bash
+python3 -m http.server 8000
+```
 
-    python3 -m http.server 8000
+Port 8000 specifically, because `localhost:8000` is in the Worker's CORS
+allowlist and other ports are not.
 
-## The resume
+`script.js` is an ES module, so opening `index.html` with a `file://` URL will
+not work. That is the only reason a server is needed.
 
-Every Resume button on the page opens
-[the PDF](https://priya123z.github.io/Priya_Bhagoriya_Resume.pdf) directly, in a
-new tab. There is no HTML version any more  there was briefly, and it meant one
-more hop between someone wanting to read the resume and reading it. A recruiter
-already knows what to do with a PDF.
+## Before pushing
 
-The `.docx` is the same document for anyone who wants it editable. Both are
-generated from the DOCX via `soffice --headless --convert-to pdf`, so after
-editing one, diff the extracted text to check the reconversion did not reflow
-anything:
+```bash
+python3 check.py
+```
 
-    pdftotext old.pdf - | diff - <(pdftotext new.pdf -)
+It drives the page with Playwright at 390, 768, 1440 and 1920 and checks the
+things that are easy to break and quiet about it: horizontal overflow, whether
+the hamburger appears at the right breakpoint, that every anchor resolves and
+every local file is served, that each tool produces a labelled answer, that
+empty input is refused before anything is called, that a bad key produces a
+readable message, and that the page still reads with JavaScript switched off.
+
+Sixty-five checks, and a non-zero exit if any of them fail. Worth running after
+any change to `style.css` in particular, because the section rules are easy to
+break on specificity and the damage shows up at one viewport only.
 
 ## How the three tools answer
 
-The review / requirements / locator-repair tools on the portfolio each answer
-one of three ways, in order of preference:
+The review, requirements and locator-repair tools each answer one of three ways,
+tried in this order. Whichever one ran, the page says so above the answer.
 
-1. **The visitor pastes their own Groq key** and the browser calls Groq
-   directly. Groq allows cross-origin requests, so there is no server in that
-   path, no shared quota to run out, and the key never leaves their machine.
-2. **A hosted API on `<body data-api="...">`.** That service lives in
-   [ai-code-review](https://github.com/Priya123z/ai-code-review) under
-   `server/`. Nothing is deployed right now  Hugging Face made Docker Spaces a
-   paid feature  so this path is dormant but tested.
-3. **A saved answer from `samples/`**, clearly labelled as saved rather than
-   passed off as live.
+1. **The visitor pasted their own Groq key.** The browser calls Groq directly.
+   Groq allows cross-origin requests, so nothing of mine is in that path, there
+   is no budget to run out, and the key never leaves the machine it was typed on.
 
-So the page always shows real model output. It can never be a broken widget,
-and it costs nothing to keep running.
+2. **Nobody pasted anything, and the Worker is deployed.** `worker/` holds my
+   Groq key as a Cloudflare secret and answers on it, inside a daily budget of
+   400 runs across everyone and 12 per visitor. This is the normal case, and it
+   is the reason the page can say "no key needed" and mean it.
 
-`prompts.js` mirrors the prompts in ai-code-review's `ai_review/analyzers/`.
-That is real duplication  path 1 has no server to fetch them from. If you
-change one, change the other.
+3. **Neither.** A saved answer from `samples/`, labelled as saved.
+
+The third one is not a consolation prize, it is the guarantee. Whatever is down,
+these tools cannot show a broken widget, and they cannot show a saved answer
+dressed up as a live one either.
+
+The Worker is wired in through one attribute:
+
+```html
+<body data-api="https://priya-ai-tools.your-subdomain.workers.dev">
+```
+
+Empty means not deployed, and the page falls back to saved answers without
+complaining. Deploy notes are in [worker/README.md](worker/README.md).
+
+### Why the key is not in the page
+
+Because the page is public. A Groq key in `script.js` is a Groq key in
+devtools, and free keys that end up in public repositories get found and drained
+quickly. The Worker exists purely so that the key can be somewhere the browser
+cannot read, which is what makes "click the button, no signup" possible at all.
+
+### Where the prompts live
+
+`prompts.js` is imported by both `script.js` and the Worker, so the two paths
+send byte-identical prompts and an answer looks the same whichever produced it.
+
+It is still a copy of the prompts in
+[ai-code-review](https://github.com/Priya123z/ai-code-review) under
+`ai_review/analyzers/`. Change one and you have to change the other. That
+duplication is real and I have not found a way around it that does not involve
+this page depending on a Python package at runtime.
+
+## The resume
+
+Every Resume button opens the PDF directly in a new tab. There was an HTML
+version briefly and it added one more click between someone wanting to read the
+resume and reading it; a recruiter already knows what to do with a PDF.
+
+The `.docx` is the same document. Both come from the DOCX via
+`soffice --headless --convert-to pdf`, so after editing, check the reconversion
+did not reflow anything:
+
+```bash
+pdftotext old.pdf - | diff - <(pdftotext new.pdf -)
+```
 
 ## Two things this page deliberately does not do
 
 **No entrance animation.** An earlier version started every section at
 `opacity: 0` and revealed it with an IntersectionObserver. Anything that stopped
-that script  a JS error, an old browser, JavaScript switched off  left the
-page blank, and that happened on the live site. The markup now renders complete
-and JavaScript only adds behaviour. Turn JS off and you still get 7,800
-characters of readable page.
+that script (a JS error, an old browser, JavaScript switched off) left the page
+blank, and that happened on the live site. The markup now renders complete and
+JavaScript only adds behaviour. Turn JS off and you still get about 12,000
+characters of readable page, which `check.py` asserts on.
 
 **No logo.** It is a portfolio for one person, so the name is the mark.
-
-## Checking it before pushing
-
-There is a Playwright script in the repo notes that covers the four viewports
-that matter (390 / 768 / 1440 / 1920), horizontal overflow, whether the
-hamburger appears at the right breakpoint, every internal link and anchor, the
-tool tabs, the empty-input and rejected-key paths, and whether the page is
-still readable with JavaScript disabled. Worth running after any change to
-`style.css`, because the section rules are easy to break on specificity.

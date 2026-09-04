@@ -1,17 +1,26 @@
-/* Prompts for the browser-side demos.
+/* The three prompts, and the JSON shape each one has to answer in.
+ *
+ * This file is imported twice: by script.js in the browser, and by the
+ * Cloudflare Worker in worker/. Both paths send the identical system prompt, so
+ * an answer looks the same whether it came back through the shared key or
+ * through a key the visitor pasted in. That was the whole reason for pulling
+ * them out here instead of writing them inline in two places.
+ *
+ * They mirror the prompts in ai-code-review under ai_review/analyzers/. That
+ * copy is still a copy, and changing one means changing the other.
+ */
 
-   These mirror the ones in ai-code-review (ai_review/analyzers/). They are
-   duplicated here rather than fetched because the demos run entirely in the
-   browser when a visitor brings their own key  there is no server in that path.
-   If you change one, change the other. */
+export const MODEL = "openai/gpt-oss-120b";
 
-const MODEL = "openai/gpt-oss-120b";
+/* Anything longer than this is almost certainly a paste accident, and long
+ * inputs are what burn through a free tier fastest. */
+export const MAX_INPUT_CHARS = 6000;
 
-const PROMPTS = {
+export const PROMPTS = {
   review: {
     system: `You are a senior QA automation engineer reviewing code.
 
-Report defects that are worth writing a test for. Judge intent, not style  a
+Report defects that are worth writing a test for. Judge intent, not style; a
 linter already covers formatting. You never invent issues to look thorough.
 
 Answer with a single JSON object and nothing else:
@@ -31,7 +40,7 @@ Answer with a single JSON object and nothing else:
   specs: {
     system: `You are a senior QA engineer writing test cases from a requirement.
 
-Cover the happy path, the boundaries, and the ways this realistically breaks 
+Cover the happy path, the boundaries, and the ways this realistically breaks:
 invalid input, permissions, concurrency, and anything the requirement leaves
 unsaid. Do not pad the list to look thorough.
 
@@ -66,3 +75,26 @@ If nothing in the markup plausibly matches, return found: false with your reason
       `Broken selector: ${selector}\n${description ? `It was targeting: ${description}\n` : ""}\nCurrent markup:\n\n\`\`\`html\n${html}\n\`\`\``,
   },
 };
+
+/* The request body Groq wants, built once so the browser and the Worker cannot
+ * drift apart on temperature or on asking for JSON back. */
+export function groqBody(tool, userText) {
+  return {
+    model: MODEL,
+    temperature: 0.1,
+    max_tokens: 3000,
+    response_format: { type: "json_object" },
+    messages: [
+      { role: "system", content: PROMPTS[tool].system },
+      { role: "user", content: userText },
+    ],
+  };
+}
+
+/* Turn one of the three request payloads into the user message. Kept next to
+ * the prompts because the argument order for heal is easy to get backwards. */
+export function userMessage(tool, payload) {
+  if (tool === "review") return PROMPTS.review.user(payload.code);
+  if (tool === "specs") return PROMPTS.specs.user(payload.story);
+  return PROMPTS.heal.user(payload.html, payload.selector, payload.description || "");
+}
