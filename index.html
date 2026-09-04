@@ -30,11 +30,11 @@
 }
 </script>
 </head>
-<!-- The address of the Worker in worker/, which holds the Groq key as a secret
-     so visitors get live answers without needing a key of their own. Empty here
-     means "not deployed", and the tools fall back to saved answers. See
-     worker/README.md. -->
-<body data-api="">
+<!-- The Worker in worker/, which holds the Groq key as a secret so visitors get
+     live answers without needing a key of their own. Emptying this attribute
+     falls the tools back to saved answers; nothing on the page depends on the
+     Worker being up. See worker/README.md. -->
+<body data-api="https://priya-ai-tools.priya123z.workers.dev">
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="topbar">

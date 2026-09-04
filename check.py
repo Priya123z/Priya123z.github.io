@@ -20,11 +20,19 @@ It checks, at four viewports:
     the visitor's own, out of budget, and the backend going down mid-session
   - the page is still readable with JavaScript switched off
 
+It never spends the Worker's budget. The deployed Worker is in `data-api` and
+localhost:8000 is in its CORS allowlist, so a naive run would fire a dozen real
+model calls every time. Every group here rewrites `data-api` in the served HTML:
+to nothing where it is checking the page's plumbing, and to a host that does not
+exist where it is checking how the page labels each backend answer. The only
+outbound call is the deliberate bad-key one, which Groq rejects for free.
+
 Exit code is non-zero if anything failed, so it works in CI as well as by hand.
 """
 from __future__ import annotations
 
 import pathlib
+import re
 import sys
 from urllib.parse import urlparse
 
@@ -53,6 +61,7 @@ def check(ok: bool, label: str) -> None:
 def check_layout(page, width: int, height: int) -> None:
     print(f"\n{width}x{height}")
     page.set_viewport_size({"width": width, "height": height})
+    serve_with_api(page, "")
     page.goto(BASE, wait_until="networkidle")
 
     scroll_w = page.evaluate("document.documentElement.scrollWidth")
@@ -91,6 +100,7 @@ def check_layout(page, width: int, height: int) -> None:
 def check_links(page) -> None:
     print("\nlinks")
     page.set_viewport_size({"width": 1440, "height": 900})
+    serve_with_api(page, "")
     page.goto(BASE, wait_until="networkidle")
 
     anchors = page.eval_on_selector_all(
@@ -119,9 +129,33 @@ def check_links(page) -> None:
         check(bool(host) and "." in host, f"external link parses: {href}")
 
 
+def serve_with_api(page, value: str) -> None:
+    """Serve index.html with data-api rewritten to `value`.
+
+    Patching the attribute in the served HTML rather than with an init script,
+    because script.js is a module and would otherwise race whatever set it.
+    """
+    def handler(route):
+        body = pathlib.Path("index.html").read_text()
+        body = re.sub(r'<body data-api="[^"]*">', f'<body data-api="{value}">', body, count=1)
+        route.fulfill(status=200, content_type="text/html; charset=utf-8", body=body)
+
+    # Registering twice on one page would stack handlers, so clear first.
+    page.unroute(f"{BASE}/")
+    page.route(f"{BASE}/", handler)
+
+
 def check_tools(page) -> None:
     print("\ntools")
     page.set_viewport_size({"width": 1440, "height": 900})
+
+    # Force the saved-answer path. The deployed Worker is in data-api, and
+    # localhost:8000 is in its CORS allowlist, so without this every run of this
+    # file would spend a dozen real model calls out of the shared daily budget
+    # and take a minute doing it. What this group is checking is the page's
+    # plumbing, which does not need a live model. The live and out-of-budget
+    # labels are checked separately, against a stub, in check_backend_paths.
+    serve_with_api(page, "")
     page.goto(BASE, wait_until="networkidle")
 
     for tool, label in (
@@ -197,16 +231,9 @@ def check_backend_paths(browser) -> None:
     page.route("**/api/specs", specs({"source": "live", "key": "shared",
                                       "model": "openai/gpt-oss-120b"}))
 
-    # The page reads its backend address off <body data-api>, which is empty in
-    # the repository until the Worker is deployed. Patching the attribute in the
-    # served HTML rather than with an init script, because script.js is a module
-    # and would otherwise race whatever set it.
-    def with_api(route):
-        body = pathlib.Path("index.html").read_text().replace(
-            '<body data-api="">', '<body data-api="https://worker.test">', 1)
-        route.fulfill(status=200, content_type="text/html; charset=utf-8", body=body)
-
-    page.route(f"{BASE}/", with_api)
+    # Point the page at a host that does not exist, so every backend call is
+    # answered by the stubs below rather than by the deployed Worker.
+    serve_with_api(page, "https://worker.test")
     page.goto(BASE, wait_until="networkidle")
 
     check(page.locator("#demo-mode").inner_text() == "shared key, answers live",
