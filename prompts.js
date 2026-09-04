@@ -74,15 +74,71 @@ If nothing in the markup plausibly matches, return found: false with your reason
     user: (html, selector, description) =>
       `Broken selector: ${selector}\n${description ? `It was targeting: ${description}\n` : ""}\nCurrent markup:\n\n\`\`\`html\n${html}\n\`\`\``,
   },
+  /* The fuller schema used by the ai-testcase-generator demo, which is a
+   * separate page on the same origin and so is served by the same Worker.
+   * `specs` above is the cut-down version the portfolio shows inline; this one
+   * returns pytest bodies rather than one-line intents.
+   *
+   * It is a copy of SYSTEM_PROMPT_V1 in that repository's app/prompts.py, and
+   * that repository has a test which fails if the two stop matching. */
+  generate: {
+    system: `You are a senior QA engineer. Your job is to analyse a user story and generate comprehensive, well-structured test cases.
+
+For every user story you receive, you must produce:
+1. A set of Gherkin scenarios (BDD format) covering:
+   - The happy path
+   - Key negative paths (invalid input, boundary conditions)
+   - Edge cases where the domain demands them
+2. A matching set of Pytest test function skeletons (one per scenario)
+3. A brief coverage note
+
+RULES:
+- Generate 3 to 7 scenarios per story. Do not pad. Do not truncate real cases.
+- Scenario names must be specific, not generic ("Successful login with valid credentials" not "Test login").
+- Gherkin steps must be concrete: use real-looking data values in Given/When steps.
+- Pytest function names must be snake_case starting with test_.
+- The coverage_notes field must honestly note what edge cases you are NOT generating (e.g. "Session management and MFA flows are out of scope for this story").
+- You MUST return valid JSON matching the schema below. No markdown fences, no prose before or after.
+
+JSON SCHEMA:
+{
+  "feature": "string",
+  "scenarios": [
+    {
+      "name": "string",
+      "tags": ["string"],
+      "steps": [
+        { "keyword": "Given|When|Then|And", "text": "string" }
+      ]
+    }
+  ],
+  "pytest_cases": [
+    {
+      "function_name": "string",
+      "docstring": "string",
+      "steps": [
+        { "description": "string", "code": "string" }
+      ]
+    }
+  ],
+  "coverage_notes": "string"
+}`,
+    user: input => input,
+  },
 };
 
 /* The request body Groq wants, built once so the browser and the Worker cannot
  * drift apart on temperature or on asking for JSON back. */
 export function groqBody(tool, userText) {
+  /* The generator returns whole pytest bodies rather than one-line summaries, so
+   * it needs the room. These match what that repository's Python client sends,
+   * so the hosted answer and a local `python -m app` run agree. */
+  const big = tool === "generate";
+
   return {
     model: MODEL,
-    temperature: 0.1,
-    max_tokens: 3000,
+    temperature: big ? 0.2 : 0.1,
+    max_tokens: big ? 8000 : 3000,
     response_format: { type: "json_object" },
     messages: [
       { role: "system", content: PROMPTS[tool].system },
@@ -96,5 +152,6 @@ export function groqBody(tool, userText) {
 export function userMessage(tool, payload) {
   if (tool === "review") return PROMPTS.review.user(payload.code);
   if (tool === "specs") return PROMPTS.specs.user(payload.story);
+  if (tool === "generate") return PROMPTS.generate.user(payload.story);
   return PROMPTS.heal.user(payload.html, payload.selector, payload.description || "");
 }

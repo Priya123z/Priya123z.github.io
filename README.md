@@ -43,7 +43,12 @@ every local file is served, that each tool produces a labelled answer, that
 empty input is refused before anything is called, that a bad key produces a
 readable message, and that the page still reads with JavaScript switched off.
 
-Sixty-five checks, and a non-zero exit if any of them fail. Worth running after
+It also stands in for the Worker and checks the part that matters most: that
+every backend outcome is labelled honestly. A saved answer presented as a live
+one is the worst bug this page could have, and it is the one you would never
+find by clicking around, because it looks exactly like success.
+
+Seventy-one checks, and a non-zero exit if any of them fail. Worth running after
 any change to `style.css` in particular, because the section rules are easy to
 break on specificity and the damage shows up at one viewport only.
 
@@ -60,6 +65,11 @@ tried in this order. Whichever one ran, the page says so above the answer.
    Groq key as a Cloudflare secret and answers on it, inside a daily budget of
    400 runs across everyone and 12 per visitor. This is the normal case, and it
    is the reason the page can say "no key needed" and mean it.
+
+   The same Worker also serves the demo on
+   [ai-testcase-generator](https://github.com/Priya123z/ai-testcase-generator),
+   which is a GitHub project page and therefore the same origin. One deployment,
+   one secret, one budget, two pages.
 
 3. **Neither.** A saved answer from `samples/`, labelled as saved.
 

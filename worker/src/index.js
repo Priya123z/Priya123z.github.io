@@ -1,4 +1,8 @@
-/* The backend behind the three tools on the portfolio.
+/* The backend behind the browser tools on priya123z.github.io.
+ *
+ * Four of them: review, specs and heal on the portfolio itself, and generate
+ * for the ai-testcase-generator demo, which is a project page on the same
+ * origin and so shares this deployment, this key and this budget.
  *
  * It exists for one reason: a visitor should be able to click "Review this
  * code" and get a real answer without going and signing up for anything. A
@@ -24,15 +28,25 @@ import { groqBody, userMessage, MODEL, MAX_INPUT_CHARS } from "../../prompts.js"
 import reviewSample from "../../samples/review.json";
 import specsSample from "../../samples/specs.json";
 import healSample from "../../samples/heal.json";
+import generateSample from "../../samples/generate.json";
 
 const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
 
-const SAMPLES = { review: reviewSample, specs: specsSample, heal: healSample };
+const SAMPLES = {
+  review: reviewSample,
+  specs: specsSample,
+  heal: healSample,
+  generate: generateSample,
+};
 
 /* Only these pages may call the Worker. Anything else gets no CORS header, so
- * the browser refuses the response. It is not authentication, and it is not
- * meant to be; it just stops the shared budget from being spent by somebody
- * else's site. */
+ * the browser refuses the response. It is not authentication and is not
+ * pretending to be; it stops the shared budget being spent by somebody else's
+ * site.
+ *
+ * Two pages call this, the portfolio and the ai-testcase-generator demo, but
+ * the second is a GitHub project page and so sits on the same origin as the
+ * first. One entry covers both. */
 const ALLOWED_ORIGINS = [
   "https://priya123z.github.io",
   "http://localhost:8000",
@@ -65,6 +79,12 @@ const TOOLS = {
       description: str(body.description),
     }),
     text: payload => payload.selector + payload.html,
+  },
+  /* Serves the ai-testcase-generator demo, which is a different page on the
+   * same origin, so it needs no CORS change and shares this one budget. */
+  generate: {
+    parse: body => ({ story: str(body.story) }),
+    text: payload => payload.story,
   },
 };
 

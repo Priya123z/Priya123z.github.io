@@ -16,12 +16,15 @@ It checks, at four viewports:
   - every local file the page links to is actually served
   - the three tools each produce an answer, and label where it came from
   - the empty-input path says so instead of calling anything
+  - every backend outcome is labelled honestly: live on the shared key, live on
+    the visitor's own, out of budget, and the backend going down mid-session
   - the page is still readable with JavaScript switched off
 
 Exit code is non-zero if anything failed, so it works in CI as well as by hand.
 """
 from __future__ import annotations
 
+import pathlib
 import sys
 from urllib.parse import urlparse
 
@@ -160,6 +163,82 @@ def check_tools(page) -> None:
     check("Groq" in warn.inner_text(), "a rejected key explains itself")
 
 
+def check_backend_paths(browser) -> None:
+    """The Worker is not deployed from here, so it is stood in for.
+
+    What is being checked is the page's half of the contract: that whatever
+    `meta.source` comes back, the visitor is told the truth about it. A saved
+    answer presented as live would be the single worst bug this page could have,
+    and it is the one no amount of clicking around would reveal.
+    """
+    print("\nbackend paths")
+    context = browser.new_context(viewport={"width": 1440, "height": 900})
+    page = context.new_page()
+
+    import json as _json
+    sample = _json.loads(pathlib.Path("samples/specs.json").read_text())
+
+    def health(shared_key: bool):
+        return lambda route: route.fulfill(
+            status=200, content_type="application/json",
+            body=_json.dumps({"status": "ok", "shared_key": shared_key,
+                              "model": "openai/gpt-oss-120b",
+                              "runs_remaining_today": 400,
+                              "runs_per_visitor_per_day": 12}),
+        )
+
+    def specs(meta):
+        return lambda route: route.fulfill(
+            status=200, content_type="application/json",
+            body=_json.dumps({"result": sample, "meta": meta}),
+        )
+
+    page.route("**/api/health", health(True))
+    page.route("**/api/specs", specs({"source": "live", "key": "shared",
+                                      "model": "openai/gpt-oss-120b"}))
+
+    # The page reads its backend address off <body data-api>, which is empty in
+    # the repository until the Worker is deployed. Patching the attribute in the
+    # served HTML rather than with an init script, because script.js is a module
+    # and would otherwise race whatever set it.
+    def with_api(route):
+        body = pathlib.Path("index.html").read_text().replace(
+            '<body data-api="">', '<body data-api="https://worker.test">', 1)
+        route.fulfill(status=200, content_type="text/html; charset=utf-8", body=body)
+
+    page.route(f"{BASE}/", with_api)
+    page.goto(BASE, wait_until="networkidle")
+
+    check(page.locator("#demo-mode").inner_text() == "shared key, answers live",
+          "mode line reports the shared key once the backend answers")
+
+    page.locator(".demo-tab[data-demo='specs']").click()
+    page.locator(".demo-run[data-demo='specs']").click()
+    page.locator("#specs-output .stamp").wait_for(timeout=15_000)
+    stamp = page.locator("#specs-output .stamp")
+    check("on my key" in stamp.inner_text(), "a shared-key answer says it ran on my key")
+    check("stamp-live" in (stamp.get_attribute("class") or ""),
+          "a live answer is styled as live")
+
+    page.route("**/api/specs", specs({"source": "cached", "reason": "daily_budget"}))
+    page.locator(".demo-run[data-demo='specs']").click()
+    page.wait_for_timeout(1200)
+    stamp = page.locator("#specs-output .stamp")
+    check("budget is spent" in stamp.inner_text(),
+          "an out-of-budget answer says why it is saved")
+    check("stamp-saved" in (stamp.get_attribute("class") or ""),
+          "a saved answer is never styled as live")
+
+    page.unroute("**/api/specs")
+    page.route("**/api/specs", lambda route: route.abort())
+    page.locator(".demo-run[data-demo='specs']").click()
+    page.wait_for_timeout(1500)
+    check("saved answer" in page.locator("#specs-output .stamp").inner_text().lower(),
+          "a backend that dies mid-session falls back to a saved answer")
+
+    context.close()
+
+
 def check_no_js(browser) -> None:
     print("\njavascript disabled")
     context = browser.new_context(java_script_enabled=False)
@@ -186,6 +265,7 @@ def main() -> int:
 
         check_links(page)
         check_tools(page)
+        check_backend_paths(browser)
 
         print("\nconsole")
         check(not errors, f"no uncaught JavaScript errors ({errors[:2]})")
