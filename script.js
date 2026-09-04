@@ -225,6 +225,9 @@ function stamp(meta = {}) {
 }
 
 function whyCached(reason) {
+  if (reason === "too_fast") {
+    return "A saved answer. That was a lot of requests in a minute, so the shared key is pausing you.";
+  }
   if (reason === "visitor_daily") {
     return "A saved answer. You have used today's dozen free runs on my key.";
   }

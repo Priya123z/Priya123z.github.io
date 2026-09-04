@@ -256,6 +256,23 @@ def check_backend_paths(browser) -> None:
     check("stamp-saved" in (stamp.get_attribute("class") or ""),
           "a saved answer is never styled as live")
 
+    # Every reason the Worker can send has to render as something a person can
+    # read. A reason with no branch would fall through to the generic text and
+    # quietly stop explaining itself.
+    for reason, expected in (
+        ("too_fast", "lot of requests in a minute"),
+        ("visitor_daily", "dozen free runs"),
+        ("provider_busy", "rate limiting"),
+        ("provider_error", "last known good"),
+        ("no_shared_key", "saved answer"),
+    ):
+        page.unroute("**/api/specs")
+        page.route("**/api/specs", specs({"source": "cached", "reason": reason}))
+        page.locator(".demo-run[data-demo='specs']").click()
+        page.wait_for_timeout(900)
+        check(expected in page.locator("#specs-output .stamp").inner_text(),
+              f"reason {reason!r} is explained in plain words")
+
     page.unroute("**/api/specs")
     page.route("**/api/specs", lambda route: route.abort())
     page.locator(".demo-run[data-demo='specs']").click()

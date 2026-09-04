@@ -7,15 +7,33 @@ enabled = true
 
 # Daily counters for the shared key.
 #
-# Left commented out on purpose, so that `wrangler deploy` works on a clean
-# account with nothing set up. The Worker answers either way; without the
-# binding it simply stops counting, and Groq's own rate limit becomes the only
-# ceiling. Turn it on with:
+# Without this binding the Worker still answers, it just stops counting, and
+# Groq's own rate limit becomes the only ceiling. That is not good enough for a
+# key that anyone on the internet can spend, so it is bound.
+#
+# Recreate it on a fresh account with:
 #
 #   wrangler kv namespace create BUDGET
 #
-# then uncomment these three lines and paste in the id it prints.
+# and paste the id it prints in below. The namespace holds counters keyed on a
+# hash of the caller's address, never the address itself, and every key expires
+# after 48 hours.
+[[kv_namespaces]]
+binding = "BUDGET"
+id = "e2668ece431647f3a2ec7176c83de71e"
+
+# Burst protection, and the thing that actually stops abuse.
 #
-# [[kv_namespaces]]
-# binding = "BUDGET"
-# id = "paste-the-id-here"
+# The KV counters below are eventually consistent: a read can be up to 60
+# seconds stale, so during a fast burst every request sees the same low number
+# and all of them are allowed. Measured, not assumed: thirteen calls in a row
+# from one address all went through a 12-per-day cap.
+#
+# This binding is strongly consistent per location and evaluated immediately,
+# so it is what enforces the limit a person actually hits. The daily KV budget
+# stays as the coarse ceiling, where being a minute stale does not matter.
+[[unsafe.bindings]]
+name = "BURST"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 6, period = 60 }

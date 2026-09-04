@@ -200,21 +200,37 @@ async function callGroq(tool, payload, key) {
 
 /* ---------------------------------------------------------------- budgeting */
 
-/* Counters live in KV, which is eventually consistent: two requests landing in
- * two datacentres in the same second can both read the same number and both
- * write count+1. The ceiling is therefore approximate, and deliberately set far
- * enough below Groq's own limits that being off by a handful does not matter.
- * The alternative is a Durable Object, which is not on the free plan.
+/* Two mechanisms, because one of them is not enough on its own.
  *
- * With no KV namespace bound at all the demo still answers; it just stops
- * counting. That is the right way round for a portfolio: a missing binding
- * should not take the page's tools offline. */
+ * The rate limiter (env.BURST) is strongly consistent and evaluated on the
+ * spot, so it is what actually stops someone hammering the endpoint. It is
+ * checked first and it is the limit a person hits in practice.
+ *
+ * The KV counters are the daily ceiling. KV reads can be up to 60 seconds
+ * stale, so during a fast burst every request reads the same number and all of
+ * them pass. That was measured rather than assumed: thirteen calls in a row
+ * from one address all went through a 12-per-day cap, which is why the rate
+ * limiter exists. At day granularity being a minute behind does not matter, so
+ * KV is the right tool for the ceiling and the wrong one for the burst.
+ *
+ * With neither binding present the demo still answers; it just stops counting.
+ * That is the right way round for a portfolio: a missing binding should not
+ * take the page's tools offline. */
 async function spend(env, request, ctx) {
+  const visitor = await visitorId(request);
+
+  /* Strongly consistent, so this one is real. Checked before KV because it is
+   * the cheap call and the one that will actually be tripped. */
+  if (env.BURST) {
+    const { success } = await env.BURST.limit({ key: visitor });
+    if (!success) return { allowed: false, reason: "too_fast" };
+  }
+
   if (!env.BUDGET) return { allowed: true };
 
   const day = new Date().toISOString().slice(0, 10);
   const sharedKey = `day:${day}`;
-  const visitorCounterKey = `ip:${day}:${await visitorId(request)}`;
+  const visitorCounterKey = `ip:${day}:${visitor}`;
 
   const [sharedRaw, visitorRaw] = await Promise.all([
     env.BUDGET.get(sharedKey),
@@ -280,6 +296,7 @@ async function health(env) {
     model: MODEL,
     runs_remaining_today: used === null ? null : Math.max(0, SHARED_RUNS_PER_DAY - used),
     runs_per_visitor_per_day: RUNS_PER_VISITOR_PER_DAY,
+    burst_limited: Boolean(env.BURST),
   };
 }
 
