@@ -44,11 +44,18 @@ empty input is refused before anything is called, that a bad key produces a
 readable message, and that the page still reads with JavaScript switched off.
 
 It also stands in for the Worker and checks the part that matters most: that
-every backend outcome is labelled honestly. A saved answer presented as a live
-one is the worst bug this page could have, and it is the one you would never
-find by clicking around, because it looks exactly like success.
+every backend outcome is labelled honestly, including a loop over every reason
+the Worker can send, so a new one cannot be added without a branch that explains
+it in words. A saved answer presented as a live one is the worst bug this page
+could have, and it is the one you would never find by clicking around, because it
+looks exactly like success.
 
-Seventy-one checks, and a non-zero exit if any of them fail. Worth running after
+It never spends the Worker's budget. `data-api` carries a real address and
+`localhost:8000` is in the Worker's CORS allowlist, so every group rewrites that
+attribute in the served HTML: to nothing where it is checking the page's
+plumbing, and to a host that does not resolve where it is checking the labels.
+
+Seventy-six checks, and a non-zero exit if any of them fail. Worth running after
 any change to `style.css` in particular, because the section rules are easy to
 break on specificity and the damage shows up at one viewport only.
 
