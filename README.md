@@ -128,3 +128,10 @@ JavaScript only adds behaviour. Turn JS off and you still get about 12,000
 characters of readable page, which `check.py` asserts on.
 
 **No logo.** It is a portfolio for one person, so the name is the mark.
+
+## Going deeper
+
+[`DEEP_DIVE.md`](DEEP_DIVE.md) is the long version: why a static portfolio has a
+backend at all, how the three answer paths decide between themselves, budgeting a
+free tier without a database, what `check.py` is really guarding against, and the
+decisions that would otherwise look arbitrary.
