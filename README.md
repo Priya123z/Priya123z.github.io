@@ -1,6 +1,6 @@
 # priya123z.github.io
 
-My portfolio. Plain HTML, CSS and JavaScript — no build step, no framework, no
+My portfolio. Plain HTML, CSS and JavaScript  no build step, no framework, no
 `node_modules`. Five files, and you can open any of them and read the whole
 thing.
 
@@ -25,7 +25,7 @@ Any static server:
 
 Every Resume button on the page opens
 [the PDF](https://priya123z.github.io/Priya_Bhagoriya_Resume.pdf) directly, in a
-new tab. There is no HTML version any more — there was briefly, and it meant one
+new tab. There is no HTML version any more  there was briefly, and it meant one
 more hop between someone wanting to read the resume and reading it. A recruiter
 already knows what to do with a PDF.
 
@@ -46,8 +46,8 @@ one of three ways, in order of preference:
    path, no shared quota to run out, and the key never leaves their machine.
 2. **A hosted API on `<body data-api="...">`.** That service lives in
    [ai-code-review](https://github.com/Priya123z/ai-code-review) under
-   `server/`. Nothing is deployed right now — Hugging Face made Docker Spaces a
-   paid feature — so this path is dormant but tested.
+   `server/`. Nothing is deployed right now  Hugging Face made Docker Spaces a
+   paid feature  so this path is dormant but tested.
 3. **A saved answer from `samples/`**, clearly labelled as saved rather than
    passed off as live.
 
@@ -55,14 +55,14 @@ So the page always shows real model output. It can never be a broken widget,
 and it costs nothing to keep running.
 
 `prompts.js` mirrors the prompts in ai-code-review's `ai_review/analyzers/`.
-That is real duplication — path 1 has no server to fetch them from. If you
+That is real duplication  path 1 has no server to fetch them from. If you
 change one, change the other.
 
 ## Two things this page deliberately does not do
 
 **No entrance animation.** An earlier version started every section at
 `opacity: 0` and revealed it with an IntersectionObserver. Anything that stopped
-that script — a JS error, an old browser, JavaScript switched off — left the
+that script  a JS error, an old browser, JavaScript switched off  left the
 page blank, and that happened on the live site. The markup now renders complete
 and JavaScript only adds behaviour. Turn JS off and you still get 7,800
 characters of readable page.

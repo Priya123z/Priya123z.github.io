@@ -2,7 +2,7 @@
 
    These mirror the ones in ai-code-review (ai_review/analyzers/). They are
    duplicated here rather than fetched because the demos run entirely in the
-   browser when a visitor brings their own key — there is no server in that path.
+   browser when a visitor brings their own key  there is no server in that path.
    If you change one, change the other. */
 
 const MODEL = "openai/gpt-oss-120b";
@@ -11,7 +11,7 @@ const PROMPTS = {
   review: {
     system: `You are a senior QA automation engineer reviewing code.
 
-Report defects that are worth writing a test for. Judge intent, not style — a
+Report defects that are worth writing a test for. Judge intent, not style  a
 linter already covers formatting. You never invent issues to look thorough.
 
 Answer with a single JSON object and nothing else:
@@ -31,7 +31,7 @@ Answer with a single JSON object and nothing else:
   specs: {
     system: `You are a senior QA engineer writing test cases from a requirement.
 
-Cover the happy path, the boundaries, and the ways this realistically breaks —
+Cover the happy path, the boundaries, and the ways this realistically breaks 
 invalid input, permissions, concurrency, and anything the requirement leaves
 unsaid. Do not pad the list to look thorough.
 

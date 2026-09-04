@@ -2,7 +2,7 @@
 
    There is deliberately no scroll-reveal here. An earlier version started every
    section at opacity 0 and faded it in, which meant anything that stopped this
-   file from running left the page blank — and that happened on the live site.
+   file from running left the page blank  and that happened on the live site.
    The markup now renders complete on load and JavaScript only adds behaviour. */
 
 const navToggle = document.getElementById("navToggle");
@@ -28,11 +28,11 @@ navset.querySelectorAll("a").forEach(link => {
 
    Three ways an answer can arrive, in order of preference:
 
-   1. The visitor pasted their own Groq key — the browser calls Groq directly.
+   1. The visitor pasted their own Groq key  the browser calls Groq directly.
       Groq allows cross-origin requests, so no server is involved, there is no
       shared quota to run out, and the key never leaves their machine.
-   2. A hosted API is configured on <body data-api> — used when one is deployed.
-   3. Neither — a saved answer from a real run, clearly labelled. That way the
+   2. A hosted API is configured on <body data-api>  used when one is deployed.
+   3. Neither  a saved answer from a real run, clearly labelled. That way the
       page always shows real model output rather than an error, which matters
       more here than being live.
  * ------------------------------------------------------------------ */
@@ -126,7 +126,7 @@ async function callGroq(system, user) {
     throw new Error("Groq rejected that key. Check it at console.groq.com/keys, or clear the field to see the saved answer.");
   }
   if (resp.status === 429) {
-    throw new Error("That key hit its rate limit. Wait a minute — the free tier allows 30 requests per minute.");
+    throw new Error("That key hit its rate limit. Wait a minute  the free tier allows 30 requests per minute.");
   }
   if (!resp.ok) {
     throw new Error(data?.error?.message || `Groq answered ${resp.status}.`);
@@ -194,14 +194,14 @@ async function run(name, button) {
 
 function stamp(meta = {}) {
   if (meta.source === "live") {
-    return `<p class="stamp stamp-live">Live — generated just now by ${esc(MODEL)} on your key.</p>`;
+    return `<p class="stamp stamp-live">Live  generated just now by ${esc(MODEL)} on your key.</p>`;
   }
   if (meta.source === "cache") {
-    return `<p class="stamp">Served from cache — this exact input has been run before.</p>`;
+    return `<p class="stamp">Served from cache  this exact input has been run before.</p>`;
   }
   if (meta.source === "cached") {
     return `<p class="stamp stamp-saved">Saved answer. The shared key is out of budget for now
-      (${esc(meta.reason || "quota")}) — add your own key below to run it live.</p>`;
+      (${esc(meta.reason || "quota")})  add your own key below to run it live.</p>`;
   }
   return `<p class="stamp stamp-saved">Saved answer from a real run, not generated just now.
     Add a free Groq key below and the same input runs live in your browser.</p>`;
@@ -230,7 +230,7 @@ function renderSpecs(r) {
       <pre>${esc((s.steps || []).join("\n"))}</pre>
     </li>`).join("");
 
-  const cases = (r.pytest_cases || []).map(c => `<li><code>${esc(c.function_name)}</code> — ${esc(c.intent || "")}</li>`).join("");
+  const cases = (r.pytest_cases || []).map(c => `<li><code>${esc(c.function_name)}</code>  ${esc(c.intent || "")}</li>`).join("");
 
   return `
     <h4>Feature: ${esc(r.feature || "")}</h4>
@@ -259,7 +259,7 @@ function showMode() {
   const el = document.getElementById("demo-mode");
   if (!el) return;
   const hasKey = !!document.getElementById("demo-key").value.trim();
-  el.textContent = hasKey ? "your key — answers live" : "saved answers — add a key to run live";
+  el.textContent = hasKey ? "your key  answers live" : "saved answers  add a key to run live";
 }
 
 document.getElementById("demo-key").addEventListener("input", showMode);
