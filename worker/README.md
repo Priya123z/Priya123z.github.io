@@ -32,7 +32,13 @@ Nothing breaks, and nothing lies about it.
 | Groq is down or rate limiting | A saved answer | `cached`, reason `provider_busy` / `provider_error` |
 | No secret set on the Worker at all | A saved answer | `cached`, reason `no_shared_key` |
 
-Every one of those is a `200` with a `meta.source` the page reads and prints
+The first row is the Worker's, not the pages'. When a visitor pastes a key, both
+pages call Groq straight from the browser and never come here, so nothing of mine
+is in that path and there is no budget to skip. The Worker accepts a key on
+`X-API-Key` anyway, for anyone calling it directly, and refuses rather than
+quietly falling back to mine if the key is bad.
+
+Every other row is a `200` with a `meta.source` the page reads and prints
 above the answer. A recruiter who clicks a demo should never be shown a stack
 trace, and should never be shown a saved answer dressed up as a live one either.
 
@@ -187,6 +193,20 @@ worker/
 
 The prompts are not in here. They are in `../prompts.js`, imported by both this
 Worker and the browser, so that an answer is identical whichever path produced
-it. The saved fallbacks are `../samples/*.json`: three for the portfolio's own tools
-and one for the ai-testcase-generator demo, and they are the same files the pages
-fetch directly when there is no backend configured at all.
+it. The saved fallbacks are `../samples/*.json`: three for the portfolio's own
+tools and one for the ai-testcase-generator demo, and they are the same files the
+pages fetch directly when there is no backend configured at all.
+
+Two things about those samples that are easy to get wrong.
+
+`specs.json` and `generate.json` look like the same shape and are not.
+`specs` asks the model for steps as plain strings, because this page renders them
+as one block; `generate` asks for `{keyword, text}` objects, because the generator
+page renders each keyword separately. The prompts in `prompts.js` say so
+explicitly. Do not unify them; the renderers would break in opposite directions.
+
+`generate.json` is the answer the generator page shows when this Worker is out of
+budget, and that page validates whatever it receives. So the sample has to satisfy
+that page's validator, which lives in another repository. If you regenerate it,
+run the generator repository's `tests/test_browser_parity.py` against it, or the
+no-key path fails silently on a file that looks fine.
