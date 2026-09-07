@@ -33,6 +33,7 @@ not work. That is the only reason a server is needed.
 ## Before pushing
 
 ```bash
+pip install playwright && playwright install chromium   # once
 python3 check.py
 ```
 
@@ -103,13 +104,17 @@ cannot read, which is what makes "click the button, no signup" possible at all.
 ### Where the prompts live
 
 `prompts.js` is imported by both `script.js` and the Worker, so the two paths
-send byte-identical prompts and an answer looks the same whichever produced it.
+send byte-identical prompts, clip long input to the same length, and an answer
+looks the same whichever produced it.
 
 It is still a copy of the prompts in
 [ai-code-review](https://github.com/Priya123z/ai-code-review) under
-`ai_review/analyzers/`. Change one and you have to change the other. That
-duplication is real and I have not found a way around it that does not involve
-this page depending on a Python package at runtime.
+`ai_review/analyzers/`, and of the one in
+[ai-testcase-generator](https://github.com/Priya123z/ai-testcase-generator).
+Change one and you have to change the other. That duplication is real and I have
+not found a way around it that does not involve this page depending on a Python
+package at runtime. The generator repository at least has a test that fails when
+its two copies drift.
 
 ## The resume
 
