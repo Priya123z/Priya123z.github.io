@@ -5,6 +5,9 @@ WALKTHROUGH.local.md
 
 # worker/
 node_modules/
+# Local archives. A 100 MB+ zip in worker/ would be committed by `git add -A`
+# and then rejected by the push, leaving the commit behind.
+*.zip
 .wrangler/
 # Secrets for `wrangler dev`. The real key lives in `wrangler secret put`,
 # never in a file. This line is the reason that stays true.
