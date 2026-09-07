@@ -6,7 +6,7 @@
  * The markup now renders complete on load and JavaScript only adds behaviour.
  */
 
-import { MODEL, groqBody, userMessage } from "./prompts.js";
+import { MODEL, clip, groqBody, userMessage } from "./prompts.js";
 
 /* ---------------------------------------------------------------------- nav */
 
@@ -66,7 +66,7 @@ const RENDERERS = { review: renderReview, specs: renderSpecs, heal: renderHeal }
  * backend is not there, which is the safe way round: it would rather say
  * "saved answers" and then be pleasantly wrong than promise live answers and
  * fail to deliver one. */
-let backend = { ready: false, remaining: null };
+let backend = { ready: false };
 
 /* What each tool sends. The shape matches what the Worker parses, and the same
  * object is fed to userMessage() on the direct-to-Groq path, so the two paths
@@ -128,7 +128,7 @@ async function callGroqDirect(tool, key) {
   const resp = await fetch(GROQ_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
-    body: JSON.stringify(groqBody(tool, userMessage(tool, payloads[tool]()))),
+    body: JSON.stringify(groqBody(tool, userMessage(tool, clip(payloads[tool]())))),
   });
 
   const data = await resp.json().catch(() => ({}));
@@ -256,7 +256,7 @@ async function probe() {
     if (!resp.ok) return;
 
     const data = await resp.json();
-    backend = { ready: Boolean(data.shared_key), remaining: data.runs_remaining_today ?? null };
+    backend = { ready: Boolean(data.shared_key) };
   } catch {
     /* Worker asleep, offline, or never deployed. Saved answers, then. */
   } finally {

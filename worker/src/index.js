@@ -23,7 +23,7 @@
  * Deploy notes are in ../README.md.
  */
 
-import { groqBody, userMessage, MODEL, MAX_INPUT_CHARS } from "../../prompts.js";
+import { groqBody, userMessage, clip, MODEL } from "../../prompts.js";
 
 import reviewSample from "../../samples/review.json";
 import specsSample from "../../samples/specs.json";
@@ -324,13 +324,6 @@ function str(value) {
   return typeof value === "string" ? value : "";
 }
 
-function clip(payload) {
-  const out = {};
-  for (const [k, v] of Object.entries(payload)) {
-    out[k] = typeof v === "string" ? v.slice(0, MAX_INPUT_CHARS) : v;
-  }
-  return out;
-}
 
 function withStatus(message, status) {
   const err = new Error(message);

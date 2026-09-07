@@ -147,6 +147,18 @@ export function groqBody(tool, userText) {
   };
 }
 
+/* Truncate the string fields of a request payload. Shared, because the browser
+ * calling Groq directly and the Worker calling it for a visitor have to send the
+ * same thing: the Worker used to clip and the browser did not, so a long paste
+ * gave two different answers depending on whether you had brought a key. */
+export function clip(payload) {
+  const out = {};
+  for (const [key, value] of Object.entries(payload)) {
+    out[key] = typeof value === "string" ? value.slice(0, MAX_INPUT_CHARS) : value;
+  }
+  return out;
+}
+
 /* Turn one of the three request payloads into the user message. Kept next to
  * the prompts because the argument order for heal is easy to get backwards. */
 export function userMessage(tool, payload) {
