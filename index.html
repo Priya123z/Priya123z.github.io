@@ -83,7 +83,6 @@
           <h2>Running right now</h2>
           <span class="pulse"><b></b>live</span>
         </div>
-        <p></p>
         <ul class="evidence-list">
           <li>
             <span class="evidence-num">30</span>
@@ -92,7 +91,7 @@
             <a href="https://priya123z.github.io/AutomationExercise-Playwright-Python-Framework/" target="_blank" rel="noreferrer">Open report</a>
           </li>
           <li>
-            <span class="evidence-num">43</span>
+            <span class="evidence-num">42</span>
             <span class="evidence-what">REST API tests with JSON Schema contracts
               <small>Published from CI on every commit, plus a nightly run</small></span>
             <a href="https://priya123z.github.io/api-test-pytest/" target="_blank" rel="noreferrer">Open report</a>
@@ -166,14 +165,14 @@
           <h3>AI Code Review</h3>
           <p>
             Reviews changed files with a model and reports defects, the tests that would have
-            caught them, and repairs for broken Playwright locators. Runs as a CLI, a GitHub
-            Action, or a hosted API.
+            caught them, and repairs for broken Playwright locators. Runs as a CLI and as a
+            GitHub Action that reviews a pull request's diff.
           </p>
           <p class="small dim">
             The interesting part is what happens when the model is unavailable: it refuses to
             report a passing gate, because an outage used to look exactly like clean code.
           </p>
-          <div class="card-tags"><span class="tag">Groq</span><span class="tag">Pydantic</span><span class="tag">FastAPI</span></div>
+          <div class="card-tags"><span class="tag">Groq</span><span class="tag">GitHub Actions</span><span class="tag">Jinja</span></div>
           <div class="card-links">
             <a href="https://github.com/Priya123z/ai-code-review" target="_blank" rel="noreferrer">Read the code</a>
             <a href="https://priya123z.github.io/ai-code-review/report/" target="_blank" rel="noreferrer">Sample report</a>
@@ -184,8 +183,8 @@
           <p class="kicker">API automation</p>
           <h3>REST API Test Suite</h3>
           <p>
-            43 tests over CRUD and auth flows. Each response is validated against a JSON Schema,
-            so a renamed field fails the build instead of quietly passing on a 200.
+            42 tests over CRUD and auth flows. The response shapes are validated against JSON
+            Schemas, so a renamed field fails the build instead of quietly passing on a 200.
           </p>
           <p class="small dim">
             A nightly run catches the upstream API changing shape on a day nobody pushed code.
@@ -201,15 +200,15 @@
           <p class="kicker">Requirements to tests</p>
           <h3>AI Test-Case Generator</h3>
           <p>
-            Turns a written requirement into Gherkin scenarios and Pytest skeletons, validated
-            through Pydantic so malformed model output fails loudly instead of becoming a
-            broken test file.
+            Turns a written requirement into Gherkin scenarios and Pytest skeletons, checked
+            against one contract that the page and the library share, so malformed model output
+            fails loudly instead of becoming a broken test file.
           </p>
           <p class="small dim">
             Its own suite splits in two: contract tests that patch the network and run anywhere,
             and integration tests that assert properties true of any valid answer.
           </p>
-          <div class="card-tags"><span class="tag">Groq</span><span class="tag">Streamlit</span><span class="tag">Pydantic</span></div>
+          <div class="card-tags"><span class="tag">Groq</span><span class="tag">Gherkin</span><span class="tag">Pytest</span></div>
           <div class="card-links">
             <a href="https://priya123z.github.io/ai-testcase-generator/" target="_blank" rel="noreferrer">Try it live</a>
             <a href="https://github.com/Priya123z/ai-testcase-generator" target="_blank" rel="noreferrer">Read the code</a>
@@ -300,8 +299,8 @@ The reset link must expire after 30 minutes and work only once. Three failed res
         </details>
 
         <p class="demo-foot">
-          The same three prompts also run as a CLI, as a GitHub Action that comments on pull
-          requests, and as a FastAPI service for a team that wants one shared instance.
+          The same three prompts also run as a CLI and as a GitHub Action that reviews a pull
+          request's diff and comments the findings on it.
           <a class="linkline" href="https://github.com/Priya123z/ai-code-review" target="_blank" rel="noreferrer">Read the code</a>,
           or read
           <a class="linkline" href="https://github.com/Priya123z/Priya123z.github.io/tree/main/worker" target="_blank" rel="noreferrer">the Worker behind this page</a>.
